@@ -55,3 +55,10 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - The report shows current on-hand quantity, estimated inventory value using each product's current purchase price, and movement totals for the selected period.
 - The movement ledger includes stock documents and stock-count adjustments. Movement cost values are indicative snapshots; inventory value is not a historical valuation or accounting valuation report.
 - The report currently shows up to 1,000 matching movements and 10,000 balance rows; narrow filters for large organizations.
+
+### Suppliers, purchases, and supplier payables
+- Organization-scoped supplier directory with contact, phone, email, address, and notes; supplier master data is managed by owner/admin/manager.
+- Incoming stock drafts can optionally be linked to a supplier. Purchase totals are calculated from quantity multiplied by unit purchase cost, with discount and initial payment details.
+- Posting an incoming document updates stock through the existing atomic stock-posting workflow. Supplier balances are tracked on the same posted purchase document.
+- Subsequent supplier payments are recorded in `supplier_payments` and atomically update the purchase's amount received and payment status. Payments are limited to the outstanding amount.
+- Supplier payment history is visible in transaction history. Supplier payment creation is available only for posted purchases linked to a supplier.
