@@ -24,7 +24,11 @@ const rupiah = (value: number) => new Intl.NumberFormat("id-ID", {
 const dateLabel = (value: string) => new Intl.DateTimeFormat("id-ID", {
   dateStyle: "medium", timeStyle: "short",
 }).format(new Date(value));
-const validDate = (value?: string) => !!value && /^\\d{4}-\\d{2}-\\d{2}$/.test(value) && !Number.isNaN(Date.parse(value));
+const validDate = (value?: string) => {
+  if (!value || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+};
 
 export default async function SalesReportPage({
   params, searchParams,
