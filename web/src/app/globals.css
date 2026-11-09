@@ -315,3 +315,10 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .inventory-report-table{min-width:1050px}
 @media(max-width:1050px){.inventory-report-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.inventory-report-filters .report-reset{justify-self:start}}
 @media(max-width:520px){.inventory-report-filters{grid-template-columns:1fr}}
+
+
+/* Supplier and purchase payable workflow */
+.supplier-payment-form{display:grid;gap:7px;max-width:360px;padding:12px;margin-top:10px;border:1px solid var(--line);border-radius:6px;background:#fbfcfa}
+.supplier-payment-form label{font-size:9px;font-weight:800}
+.supplier-payment-form input,.supplier-payment-form select{width:100%;border:1px solid var(--line);border-radius:5px;padding:9px;background:#fff;font:inherit;font-size:10px}
+.supplier-payment-form .post-document-button{justify-self:start;margin-top:4px}
