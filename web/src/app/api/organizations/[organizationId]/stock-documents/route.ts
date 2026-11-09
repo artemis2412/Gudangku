@@ -8,7 +8,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
  const {data:member}=await supabase.from("organization_members").select("role").eq("organization_id",organizationId).eq("user_id",userId).maybeSingle();
  if(!member||!["owner","admin","manager","staff"].includes(member.role))return NextResponse.json({error:"Tidak memiliki akses membuat transaksi."},{status:403});
  let body:unknown;try{body=await request.json();}catch{return NextResponse.json({error:"Format data tidak valid."},{status:400});}
- const input=body as {document_type?:unknown;source_warehouse_id?:unknown;destination_warehouse_id?:unknown;notes?:unknown;reference_number?:unknown;occurred_at?:unknown;items?:unknown};
+ const input=body as {document_type?:unknown;source_warehouse_id?:unknown;destination_warehouse_id?:unknown;notes?:unknown;reference_number?:unknown;occurred_at?:unknown;items?:unknown;discount_amount?:unknown;payment_method?:unknown;amount_received?:unknown};
  const type=input.document_type;if(type!=="IN"&&type!=="OUT"&&type!=="TRANSFER")return NextResponse.json({error:"Jenis transaksi tidak valid."},{status:400});
  const source=typeof input.source_warehouse_id==="string"?input.source_warehouse_id:null;
  const destination=typeof input.destination_warehouse_id==="string"?input.destination_warehouse_id:null;
@@ -37,16 +37,25 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
  const warehouseIds=[source,destination].filter((id):id is string=>Boolean(id));
  const {data:warehouses}=await supabase.from("warehouses").select("id").eq("organization_id",organizationId).in("id",warehouseIds).eq("is_active",true);
  if((warehouses?.length??0)!==new Set(warehouseIds).size)return NextResponse.json({error:"Gudang tidak valid atau tidak aktif."},{status:400});
+ const subtotal=type==="OUT"?Math.round(items.reduce((sum,item)=>sum+item.line_total,0)*100)/100:0;
+ const discount=type==="OUT"?Number(input.discount_amount??0):0;
+ const paymentMethod=type==="OUT"&&["CASH","BANK_TRANSFER","QRIS","CREDIT"].includes(String(input.payment_method))?String(input.payment_method):"CASH";
+ const received=type==="OUT"?Number(input.amount_received??0):0;
+ if(type==="OUT"&&(!Number.isFinite(discount)||discount<0||discount>subtotal||!Number.isFinite(received)||received<0))return NextResponse.json({error:"Diskon atau uang diterima tidak valid."},{status:400});
+ const grandTotal=Math.round((subtotal-discount)*100)/100;
+ if(type==="OUT"&&paymentMethod!=="CASH"&&received>grandTotal)return NextResponse.json({error:"Uang diterima tidak boleh melebihi total untuk metode pembayaran ini."},{status:400});
+ const change=paymentMethod==="CASH"?Math.max(0,Math.round((received-grandTotal)*100)/100):0;
+ const paymentStatus=received===0?"UNPAID":received>=grandTotal?"PAID":"PARTIAL";
  const now=new Date();const occurredAt=typeof input.occurred_at==="string"&&!Number.isNaN(Date.parse(input.occurred_at))?new Date(input.occurred_at).toISOString():now.toISOString();
  const documentNumber=`GDG-${type}-${now.toISOString().replace(/[-:TZ.]/g,"").slice(0,14)}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
  const {data:document,error:documentError}=await supabase.from("stock_documents").insert({
   organization_id:organizationId,document_number:documentNumber,document_type:type,status:"DRAFT",source_warehouse_id:source,destination_warehouse_id:destination,
   notes:typeof input.notes==="string"?input.notes.trim().slice(0,1000)||null:null,
   reference_number:typeof input.reference_number==="string"?input.reference_number.trim().slice(0,100)||null:null,
-  occurred_at:occurredAt,created_by:userId,
+  occurred_at:occurredAt,created_by:userId,subtotal_amount:subtotal,discount_amount:discount,grand_total:grandTotal,payment_method:paymentMethod,amount_received:received,change_amount:change,payment_status:paymentStatus,
  }).select("id,document_number").single();
  if(documentError||!document)return NextResponse.json({error:"Dokumen transaksi gagal dibuat."},{status:400});
  const {error:itemError}=await supabase.from("stock_document_items").insert(items.map(item=>({...item,organization_id:organizationId,document_id:document.id})));
  if(itemError){await supabase.from("stock_documents").delete().eq("id",document.id).eq("organization_id",organizationId);return NextResponse.json({error:"Item transaksi gagal disimpan. Draft dibatalkan; periksa kembali data produk."},{status:400});}
- return NextResponse.json({document,total_sales:items.reduce((sum,item)=>sum+item.line_total,0)},{status:201});
+ return NextResponse.json({document,subtotal,discount_amount:discount,grand_total:grandTotal,amount_received:received,change_amount:change,payment_status:paymentStatus},{status:201});
 }
