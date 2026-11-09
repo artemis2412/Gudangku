@@ -322,3 +322,6 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .supplier-payment-form label{font-size:9px;font-weight:800}
 .supplier-payment-form input,.supplier-payment-form select{width:100%;border:1px solid var(--line);border-radius:5px;padding:9px;background:#fff;font:inherit;font-size:10px}
 .supplier-payment-form .post-document-button{justify-self:start;margin-top:4px}
+
+
+.purchase-report-table{min-width:1040px}
