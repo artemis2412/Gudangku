@@ -286,3 +286,21 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .receipt-payment-history>div span,.receipt-payment-history small{color:#65736b}
 .receipt-payment-history small{grid-column:1/-1}
 @media print{.receipt-payment-history{break-inside:avoid}}
+
+
+/* Sales and receivables report */
+.report-filter-panel{margin-bottom:14px}
+.report-filters{display:grid;grid-template-columns:1fr 1fr 1.4fr auto auto;align-items:end;gap:11px}
+.report-filters>div{display:flex;flex-direction:column;gap:7px;min-width:0}
+.report-filters label{font-size:10px;font-weight:800}
+.report-filters input,.report-filters select{width:100%;min-width:0;border:1px solid var(--line);border-radius:5px;padding:10px;background:#fff;color:var(--ink);font:inherit;font-size:10px}
+.report-filter-submit{border:0;cursor:pointer;font:inherit;font-size:10px;white-space:nowrap}
+.report-reset{padding:11px 2px;white-space:nowrap}
+.report-metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:14px}
+.report-metric-grid .metric-card strong{font-size:clamp(17px,2vw,25px);overflow-wrap:anywhere}
+.sales-report-table-panel{margin-bottom:70px}
+.report-summary-line{display:flex;gap:22px;flex-wrap:wrap;padding:0 0 15px;font-size:10px;color:var(--muted)}
+.report-summary-line strong{color:var(--ink)}
+.sales-report-table{min-width:1120px}
+@media(max-width:900px){.report-filters{grid-template-columns:1fr 1fr}.report-filters>div:nth-child(3){grid-column:1/-1}.report-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.report-filters{grid-template-columns:1fr}.report-filters>div:nth-child(3){grid-column:auto}.report-metric-grid{gap:8px}.report-metric-grid .metric-card{padding:13px}.report-metric-grid .metric-card strong{font-size:17px}.report-summary-line{flex-direction:column;gap:7px}}
