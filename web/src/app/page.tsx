@@ -29,7 +29,7 @@ export default function HomePage() {
             Dibangun untuk pencatatan yang jelas dan kontrol stok yang lebih rapi.
           </p>
           <div className="hero-actions">
-            <a className="primary-button" href="#modul">Jelajahi modul <span aria-hidden="true">↗</span></a>
+            <Link className="primary-button" href="#modul">Jelajahi modul <span aria-hidden="true">↗</span></Link>
             <span className="status-note"><i /> Fondasi aplikasi disiapkan</span>
           </div>
         </div>
