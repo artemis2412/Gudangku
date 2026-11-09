@@ -44,3 +44,8 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - Posted outbound sales with an outstanding balance can receive additional payments without creating a new stock transaction.
 - Each subsequent payment is recorded in a separate customer_payments ledger and atomically updates the sales document's amount received and payment status.
 - Only organization members with owner, admin, manager, or staff roles can record payments; amounts cannot exceed the outstanding balance.
+
+### Sales and receivables report
+- The organization dashboard links to `/dashboard/[organizationId]/reports/sales` for posted outbound sales, with date and customer filters.
+- The report summarizes gross subtotal, discounts, net sales, allocated payments, and outstanding receivables; drafts are excluded.
+- Payment collected is capped at each sale's grand total so cash change is not counted as revenue collected. The report currently displays up to 1,000 matching transactions; narrow the date range for larger histories.
