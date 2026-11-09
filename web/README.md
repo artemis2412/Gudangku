@@ -24,3 +24,9 @@ Node.js 20.9 or newer is required by Next.js 16. Do not use a service-role or se
 
 ## Transaction behavior
 Creating a stock document saves a DRAFT and does not change stock. An owner, admin, or manager must post it. Posting calls the database function, which validates stock availability and atomically updates balances, movements, document status, and audit log. A failed posting leaves stock unchanged.
+
+
+### Packaging and sales pricing
+- Products can optionally define pieces per carton, selling price per piece, and selling price per carton.
+- Outbound stock documents support piece/carton quantities, convert carton quantities to base stock units, and snapshot the selling price and line total on each document item.
+- Stock balances and stock movements continue to use the product's base stock unit; outbound sales totals are displayed in transaction history and the stock card.
