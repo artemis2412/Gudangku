@@ -22,7 +22,7 @@ export default async function StockDocumentsPage({ params }: { params: Promise<{
   const [warehousesResult, productsResult, documentsResult] = await Promise.all([
     supabase.from("warehouses").select("id, code, name").eq("organization_id", organizationId).eq("is_active", true).order("name"),
     supabase.from("products").select("id, name, sku, purchase_price, selling_price, pieces_per_carton, piece_selling_price, carton_selling_price").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
-    supabase.from("stock_documents").select("id, document_number, document_type, status, occurred_at, notes, stock_document_items(id, quantity, sales_unit, sales_quantity, unit_price, line_total, products(name))")
+    supabase.from("stock_documents").select("id, document_number, document_type, status, occurred_at, notes, subtotal_amount, discount_amount, grand_total, payment_method, amount_received, change_amount, payment_status, stock_document_items(id, quantity, sales_unit, sales_quantity, unit_price, line_total, products(name))")
       .eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
   ]);
   const canPost = ["owner", "admin", "manager"].includes(membership.role);
