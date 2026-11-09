@@ -30,3 +30,8 @@ Creating a stock document saves a DRAFT and does not change stock. An owner, adm
 - Products can optionally define pieces per carton, selling price per piece, and selling price per carton.
 - Outbound stock documents support piece/carton quantities, convert carton quantities to base stock units, and snapshot the selling price and line total on each document item.
 - Stock balances and stock movements continue to use the product's base stock unit; outbound sales totals are displayed in transaction history and the stock card.
+
+
+### Penjualan dan pembayaran
+
+Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, diskon, total akhir, metode pembayaran (tunai, transfer bank, QRIS, atau tempo), jumlah uang diterima, kembalian, dan status pembayaran (belum dibayar, sebagian, atau lunas). Nilai pembayaran dan diskon dihitung ulang serta divalidasi pada API sebelum draft disimpan. Stok tetap baru berubah setelah dokumen diposting.
