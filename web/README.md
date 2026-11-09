@@ -8,9 +8,10 @@ Next.js App Router + TypeScript web client.
 - Next.js `proxy.ts` session refresh
 - Signup, login, email confirmation, logout, and organization workspace
 - Live inventory overview
-- Master products and warehouses with organization-scoped APIs
+- Master products, warehouses, categories, and units with organization-scoped APIs
 - Stock document drafts for IN, OUT, and TRANSFER
 - Manager-only posting through the atomic database stock-posting function
+- Per-warehouse stock balances and filterable stock movement ledger
 
 ## Setup
 1. Copy `.env.example` to `.env.local`.
