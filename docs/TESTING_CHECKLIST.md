@@ -26,6 +26,12 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Tolak ukuran dus nol atau negatif.
 - [ ] Tolak harga dan stok minimum negatif.
 - [ ] Produk dari organisasi lain tidak dapat dipilih.
+- [ ] Tambah kategori dan satuan berhasil.
+- [ ] Edit nama/deskripsi kategori berhasil.
+- [ ] Edit nama/singkatan satuan berhasil.
+- [ ] Kategori yang sedang dipakai produk tidak dapat dihapus.
+- [ ] Satuan yang sedang dipakai produk tidak dapat dihapus.
+- [ ] Staff hanya dapat melihat kategori/satuan dan tidak melihat kontrol edit/hapus.
 
 ## 4. Barang masuk (IN)
 - [ ] Buat draft barang masuk.
