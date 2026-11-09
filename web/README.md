@@ -39,3 +39,8 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 ### Customers and sales receipts
 - Maintain an organization-scoped customer directory with name, optional code, phone, address, and notes.
 - Select an optional customer on outbound sales drafts; customer details are shown on the printable sales receipt.
+
+### Customer payment collection
+- Posted outbound sales with an outstanding balance can receive additional payments without creating a new stock transaction.
+- Each subsequent payment is recorded in a separate customer_payments ledger and atomically updates the sales document's amount received and payment status.
+- Only organization members with owner, admin, manager, or staff roles can record payments; amounts cannot exceed the outstanding balance.
