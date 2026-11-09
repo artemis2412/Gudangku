@@ -39,7 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
  if((warehouses?.length??0)!==new Set(warehouseIds).size)return NextResponse.json({error:"Gudang tidak valid atau tidak aktif."},{status:400});
  const subtotal=type==="OUT"?Math.round(items.reduce((sum,item)=>sum+item.line_total,0)*100)/100:0;
  const discount=type==="OUT"?Number(input.discount_amount??0):0;
- const paymentMethod=type==="OUT"&&["CASH","BANK_TRANSFER","QRIS","CREDIT"].includes(String(input.payment_method))?String(input.payment_method):"CASH";
+ const allowedPaymentMethods=["CASH","BANK_TRANSFER","QRIS","CREDIT"];if(type==="OUT"&&!allowedPaymentMethods.includes(String(input.payment_method??"CASH")))return NextResponse.json({error:"Metode pembayaran tidak valid."},{status:400});const paymentMethod=type==="OUT"?String(input.payment_method??"CASH"):"CASH";
  const received=type==="OUT"?Number(input.amount_received??0):0;
  if(type==="OUT"&&(!Number.isFinite(discount)||discount<0||discount>subtotal||!Number.isFinite(received)||received<0))return NextResponse.json({error:"Diskon atau uang diterima tidak valid."},{status:400});
  const grandTotal=Math.round((subtotal-discount)*100)/100;
