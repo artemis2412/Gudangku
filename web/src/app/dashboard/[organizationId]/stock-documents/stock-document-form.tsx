@@ -3,7 +3,8 @@ import { useMemo,useState,type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 type Warehouse={id:string;code:string;name:string};
 type Product={id:string;name:string;sku:string|null;purchase_price:number|string;selling_price:number|string;pieces_per_carton:number|null;piece_selling_price:number|string|null;carton_selling_price:number|string|null};
-type Customer={id:string;name:string;phone:string|null};\ntype Supplier={id:string;name:string;code:string|null};
+type Customer={id:string;name:string;phone:string|null};
+type Supplier={id:string;name:string;code:string|null};
 type Line={product_id:string;quantity:string;unit_cost:string;sales_unit:"PCS"|"CARTON";sales_quantity:string;unit_price:string};
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
 export function StockDocumentForm({organizationId,warehouses,products,customers,suppliers}:{organizationId:string;warehouses:Warehouse[];products:Product[];customers:Customer[];suppliers:Supplier[]}) {
@@ -29,7 +30,8 @@ export function StockDocumentForm({organizationId,warehouses,products,customers,
   <label htmlFor="doc-type">Jenis transaksi</label><select id="doc-type" value={type} onChange={e=>{setType(e.target.value as typeof type);setSource("");setDestination("");}}>
    <option value="IN">Barang masuk</option><option value="OUT">Barang keluar / penjualan</option><option value="TRANSFER">Transfer antar-gudang</option>
   </select>
-  {type==="IN"&&<><label htmlFor="doc-supplier">Supplier (opsional)</label><select id="doc-supplier" value={supplierId} onChange={e=>setSupplierId(e.target.value)}><option value="">Pembelian tanpa supplier</option>{suppliers.map(s=><option key={s.id} value={s.id}>{s.name}{s.code?` · ${s.code}`:""}</option>)}</select></>}\n  {type==="OUT"&&<><label htmlFor="doc-customer">Pelanggan (opsional)</label><select id="doc-customer" value={customerId} onChange={e=>setCustomerId(e.target.value)}><option value="">Pelanggan umum / tanpa nama</option>{customers.map(c=><option key={c.id} value={c.id}>{c.name}{c.phone?` · ${c.phone}`:""}</option>)}</select></>}
+  {type==="IN"&&<><label htmlFor="doc-supplier">Supplier (opsional)</label><select id="doc-supplier" value={supplierId} onChange={e=>setSupplierId(e.target.value)}><option value="">Pembelian tanpa supplier</option>{suppliers.map(s=><option key={s.id} value={s.id}>{s.name}{s.code?` · ${s.code}`:""}</option>)}</select></>}
+  {type==="OUT"&&<><label htmlFor="doc-customer">Pelanggan (opsional)</label><select id="doc-customer" value={customerId} onChange={e=>setCustomerId(e.target.value)}><option value="">Pelanggan umum / tanpa nama</option>{customers.map(c=><option key={c.id} value={c.id}>{c.name}{c.phone?` · ${c.phone}`:""}</option>)}</select></>}
   {type!=="IN"&&<><label htmlFor="doc-source">{type==="TRANSFER"?"Gudang asal":"Gudang pengeluaran"}</label><select id="doc-source" value={source} onChange={e=>setSource(e.target.value)} required><option value="">Pilih gudang</option>{warehouses.map(w=><option key={w.id} value={w.id}>{w.code} · {w.name}</option>)}</select></>}
   {type!=="OUT"&&<><label htmlFor="doc-destination">{type==="TRANSFER"?"Gudang tujuan":"Gudang penerimaan"}</label><select id="doc-destination" value={destination} onChange={e=>setDestination(e.target.value)} required><option value="">Pilih gudang</option>{warehouses.filter(w=>type!=="TRANSFER"||w.id!==source).map(w=><option key={w.id} value={w.id}>{w.code} · {w.name}</option>)}</select></>}
   <div className="transaction-lines-heading"><strong>Item barang</strong><button type="button" className="add-line-button" onClick={addLine} disabled={lines.length>=200}>+ Tambah item</button></div>
