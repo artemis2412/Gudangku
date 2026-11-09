@@ -325,3 +325,8 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 
 
 .purchase-report-table{min-width:1040px}
+
+
+/* Stock returns */
+.return-form .transaction-line,.transaction-form .transaction-line{margin-bottom:10px}
+.return-form .transaction-line small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
