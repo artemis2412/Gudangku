@@ -67,3 +67,10 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - `/dashboard/[organizationId]/reports/purchases` reports posted supplier-linked incoming stock documents, filtered by date and supplier.
 - Summary metrics include purchase count, purchase total after discounts, allocated payments, and outstanding supplier payables.
 - Supplier payments are stored separately from stock movement and cannot exceed the outstanding purchase balance.
+
+### Sales and purchase returns
+- `/dashboard/[organizationId]/returns` creates draft sales returns against posted OUT documents and purchase returns against posted IN documents.
+- Returned quantities are tracked per original document line. The database posting function serializes posting against the original document and rejects quantities above the original line's remaining returnable quantity.
+- Sales returns add stock back to the original sales warehouse. Purchase returns remove stock from the original purchase receiving warehouse and are rejected when available stock is insufficient.
+- Return posting creates `SALES_RETURN_IN` or `PURCHASE_RETURN_OUT` stock movements and an audit log entry. Draft returns do not change stock.
+- The return document stores the estimated value based on the original line's sales price or purchase cost. Cash refunds and supplier credit/payment settlement are not yet automated; those require a separate settlement workflow.
