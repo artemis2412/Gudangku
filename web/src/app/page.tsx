@@ -15,7 +15,7 @@ export default function HomePage() {
           <span className="brand-mark">G</span>
           <span>GUDANGKU</span>
         </a>
-        <span className="environment">INTERNAL PREVIEW</span>
+        <div className="topbar-actions"><span className="environment">INTERNAL PREVIEW</span><a className="text-button" href="/login">Masuk</a></div>
       </header>
 
       <section className="hero">
