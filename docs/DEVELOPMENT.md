@@ -25,8 +25,8 @@
 
 ## Current stage
 - Repository and database foundation established.
-- Web: Next.js app scaffold, responsive landing page, Supabase SSR utilities, signup/login, email confirmation endpoint, logout, organization creation, and protected organization workspace route added.
+- Web: Next.js app scaffold, responsive landing page, Supabase SSR utilities, signup/login, email confirmation endpoint, logout, organization creation, protected organization workspace, and live inventory overview queries added.
 - Database: existing organization/member schema and RLS policies inspected; organization owner membership is created by a database trigger.
 - Android: Kotlin/Compose scaffold and initial native screen added; Supabase Auth integration remains pending.
-- Not yet completed: local dependency installation/build verification, automated tests, full Android Auth integration, role management/invitations, inventory screens, and CI.
+- Not yet completed: local dependency installation/build verification, automated tests, full Android Auth integration, role management/invitations, dedicated product/warehouse/transaction screens, and CI.
 - The initial database schema still needs to be captured and reviewed as a canonical migration before automated resets/deployments.
