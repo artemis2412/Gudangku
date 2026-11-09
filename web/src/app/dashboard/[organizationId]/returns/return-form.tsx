@@ -2,7 +2,7 @@
 import {useMemo,useState,type FormEvent} from "react";
 import {useRouter} from "next/navigation";
 type SourceItem={id:string;product_id:string;quantity:number|string;unit_cost:number|string;unit_price:number|string;products:{name:string}|null;returned:number};
-type Source={id:string;document_number:string;document_type:string;occurred_at:string;customer_id:string|null;supplier_id:string|null;customer_name:string|null;supplier_name:string|null;items:SourceItem[]};
+type Source={id:string;document_number:string;document_type:string;occurred_at:string;customer_id:string|null;supplier_id:string|null;customer_name:string|null;supplier_name:string|null;return_factor:number;items:SourceItem[]};
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
 export function ReturnForm({organizationId,sources}:{organizationId:string;sources:Source[]}){
  const router=useRouter();const [type,setType]=useState<"SALES"|"PURCHASE">("SALES");const [sourceId,setSourceId]=useState("");const [quantities,setQuantities]=useState<Record<string,string>>({});const [reason,setReason]=useState("");const [error,setError]=useState("");const [busy,setBusy]=useState(false);
