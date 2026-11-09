@@ -8,7 +8,7 @@ Next.js App Router + TypeScript web client.
 - Next.js `proxy.ts` session refresh
 - Signup, login, email confirmation, logout, and organization workspace
 - Live inventory overview
-- Master products, warehouses, categories, and units with organization-scoped APIs
+- Master products, warehouses, customers, categories, and units with organization-scoped APIs
 - Stock document drafts for IN, OUT, and TRANSFER
 - Manager-only posting through the atomic database stock-posting function
 - Per-warehouse stock balances and filterable stock movement ledger
@@ -35,3 +35,7 @@ Creating a stock document saves a DRAFT and does not change stock. An owner, adm
 ### Penjualan dan pembayaran
 
 Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, diskon, total akhir, metode pembayaran (tunai, transfer bank, QRIS, atau tempo), jumlah uang diterima, kembalian, dan status pembayaran (belum dibayar, sebagian, atau lunas). Nilai pembayaran dan diskon dihitung ulang serta divalidasi pada API sebelum draft disimpan. Stok tetap baru berubah setelah dokumen diposting.
+
+### Customers and sales receipts
+- Maintain an organization-scoped customer directory with name, optional code, phone, address, and notes.
+- Select an optional customer on outbound sales drafts; customer details are shown on the printable sales receipt.
