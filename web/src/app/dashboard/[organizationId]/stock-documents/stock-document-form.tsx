@@ -11,7 +11,7 @@ export function StockDocumentForm({organizationId,warehouses,products}:{organiza
  const [lines,setLines]=useState<Line[]>([{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);
  const [error,setError]=useState("");const [busy,setBusy]=useState(false);
  function updateLine(index:number,key:keyof Line,value:string){setLines(current=>current.map((line,i)=>i===index?{...line,[key]:value}:line));}
- function chooseProduct(index:number,id:string){const p=products.find(x=>x.id===id);setLines(current=>current.map((line,i)=>i!==index?line:{...line,product_id:id,unit_cost:String(p?.purchase_price??0),unit_price:String(p?.piece_selling_price??p?.selling_price??0)}));}
+ function chooseProduct(index:number,id:string){const p=products.find(x=>x.id===id);setLines(current=>current.map((line,i)=>i!==index?line:{...line,product_id:id,unit_cost:String(p?.purchase_price??0),unit_price:String(line.sales_unit==="CARTON"?(p?.carton_selling_price??0):(p?.piece_selling_price??p?.selling_price??0))}));}
  function changeSalesUnit(index:number,unit:"PCS"|"CARTON"){const line=lines[index];const p=products.find(x=>x.id===line.product_id);const price=unit==="CARTON"?p?.carton_selling_price:p?.piece_selling_price??p?.selling_price;setLines(current=>current.map((x,i)=>i===index?{...x,sales_unit:unit,unit_price:String(price??0)}:x));}
  function addLine(){if(lines.length<200)setLines(x=>[...x,{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);}
  function removeLine(index:number){setLines(x=>x.length>1?x.filter((_,i)=>i!==index):x);}
