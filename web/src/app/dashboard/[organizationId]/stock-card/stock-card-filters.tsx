@@ -7,7 +7,8 @@ type Movement = {
   id: string; movement_type: string; quantity_delta: number | string; unit_cost: number | string; occurred_at: string;
   products: Product | null; warehouses: Warehouse | null;
   stock_documents: { id: string; document_number: string; document_type: string; status: string } | null;
-  stock_counts: { id: string; count_number: string; status: string } | null;\n  stock_document_items: { sales_unit: string; sales_quantity: number | string; unit_price: number | string; line_total: number | string } | null;
+  stock_counts: { id: string; count_number: string; status: string } | null;
+  stock_document_items: { sales_unit: string; sales_quantity: number | string; unit_price: number | string; line_total: number | string } | null;
 };
 const fmt = (v: number | string) => new Intl.NumberFormat("id-ID", { maximumFractionDigits: 3 }).format(Number(v ?? 0));
 const dateFmt = (v: string) => new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(new Date(v));
