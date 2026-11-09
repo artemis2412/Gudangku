@@ -7,7 +7,7 @@ const n=(v:number|string|null|undefined)=>Number(v??0);
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
 const date=(v:string)=>new Intl.DateTimeFormat("id-ID",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v));
 const valid = (value?: string) => {
- if (!value || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+ if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
  const parsed = new Date(`${value}T00:00:00Z`);
  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 };
