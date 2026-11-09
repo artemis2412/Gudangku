@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CategoryForm } from "./category-form";
 import { UnitForm } from "./unit-form";
+import { CategoryList } from "./category-list";
+import { UnitList } from "./unit-list";
 
 type Category = { id: string; name: string; description: string | null };
 type Unit = { id: string; name: string; abbreviation: string };
@@ -27,11 +29,11 @@ export default async function MasterDataPage({ params }: { params: Promise<{ org
     {(categoriesResult.error || unitsResult.error) && <p className="form-error">Sebagian data master gagal dimuat. Periksa koneksi database.</p>}
     <section className="master-layout">
       <article className="data-panel"><div className="panel-section-heading"><div><p className="eyebrow">KATEGORI BARANG</p><h2>Daftar kategori</h2></div><span className="panel-count">{categoriesResult.data?.length ?? 0}</span></div>
-        {categoriesResult.data?.length ? <ul className="master-list">{(categoriesResult.data as Category[]).map(item => <li key={item.id}><strong>{item.name}</strong>{item.description && <span>{item.description}</span>}</li>)}</ul> : <p className="empty-note">Belum ada kategori.</p>}
+        {categoriesResult.data?.length ? <CategoryList organizationId={organizationId} items={categoriesResult.data as Category[]} canManage={canManage}/> : <p className="empty-note">Belum ada kategori.</p>}
         {canManage && <><div className="form-divider-label">TAMBAH KATEGORI</div><CategoryForm organizationId={organizationId}/></>}
       </article>
       <article className="data-panel"><div className="panel-section-heading"><div><p className="eyebrow">SATUAN STOK</p><h2>Daftar satuan</h2></div><span className="panel-count">{unitsResult.data?.length ?? 0}</span></div>
-        {unitsResult.data?.length ? <ul className="master-list">{(unitsResult.data as Unit[]).map(item => <li key={item.id}><strong>{item.name}</strong><span>{item.abbreviation}</span></li>)}</ul> : <p className="empty-note">Belum ada satuan.</p>}
+        {unitsResult.data?.length ? <UnitList organizationId={organizationId} items={unitsResult.data as Unit[]} canManage={canManage}/> : <p className="empty-note">Belum ada satuan.</p>}
         {canManage && <><div className="form-divider-label">TAMBAH SATUAN</div><UnitForm organizationId={organizationId}/></>}
       </article>
     </section>
