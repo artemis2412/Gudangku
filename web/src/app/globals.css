@@ -219,3 +219,12 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .sales-cost-note strong{font-size:12px;color:var(--foreground)}
 .sales-document-lines{display:grid;gap:3px;margin-top:5px;padding-left:8px;border-left:2px solid var(--line)}
 .sales-document-lines small{font-size:9px;color:var(--muted)}
+
+
+/* Sales receipt and payment summary */
+.sales-payment-panel{display:grid;gap:10px;margin:14px 0;padding:16px;border:1px solid var(--border,#dedede);border-radius:14px;background:var(--surface-soft,#f8f8f8)}
+.sales-payment-row{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.92rem}
+.sales-grand-total{padding-top:10px;border-top:1px solid var(--border,#dedede);font-size:1.05rem}
+.sales-grand-total strong{font-size:1.2rem}
+.sales-document-payment{display:grid;gap:4px;margin:8px 0;padding:10px 12px;border-radius:10px;background:var(--surface-soft,#f8f8f8)}
+.sales-document-payment small{line-height:1.5}
