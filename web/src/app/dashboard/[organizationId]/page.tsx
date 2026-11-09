@@ -64,10 +64,11 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
   }
 
   const totalUnits = balances.reduce((sum, row) => sum + number(row.quantity), 0);
-  const lowStock = products.filter(product =>
+  const lowStockProducts = products.filter(product =>
     number(product.minimum_stock) > 0 &&
     (quantityByProduct.get(product.id) ?? 0) <= number(product.minimum_stock)
-  ).sort((a, b) => (quantityByProduct.get(a.id) ?? 0) - (quantityByProduct.get(b.id) ?? 0)).slice(0, 6);
+  ).sort((a, b) => (quantityByProduct.get(a.id) ?? 0) - (quantityByProduct.get(b.id) ?? 0));
+  const lowStock = lowStockProducts.slice(0, 6);
 
   const movements = (movementsResult.data ?? []) as unknown as MovementRow[];
   const dataWarnings = [
@@ -101,12 +102,12 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
         <article className="metric-card"><span>PRODUK AKTIF</span><strong>{formatNumber(productsResult.count ?? products.length)}</strong><small>Item terdaftar</small></article>
         <article className="metric-card"><span>TOTAL STOK</span><strong>{formatNumber(totalUnits)}</strong><small>Akumulasi seluruh gudang</small></article>
         <article className="metric-card"><span>GUDANG AKTIF</span><strong>{formatNumber(warehousesResult.count ?? 0)}</strong><small>Lokasi penyimpanan</small></article>
-        <article className="metric-card metric-alert"><span>STOK MENIPIS</span><strong>{formatNumber(lowStock.length)}</strong><small>Produk pada/bawah batas minimum</small></article>
+        <article className="metric-card metric-alert"><span>STOK MENIPIS</span><strong>{formatNumber(lowStockProducts.length)}</strong><small>Produk pada/bawah batas minimum</small></article>
       </section>
 
       <section className="dashboard-content-grid">
         <article className="data-panel">
-          <div className="panel-section-heading"><div><p className="eyebrow">PERLU DIPERHATIKAN</p><h2>Stok menipis</h2></div><span className="panel-count">{lowStock.length} produk</span></div>
+          <div className="panel-section-heading"><div><p className="eyebrow">PERLU DIPERHATIKAN</p><h2>Stok menipis</h2></div><span className="panel-count">{lowStockProducts.length} produk</span></div>
           {lowStock.length ? (
             <div className="stock-list">
               {lowStock.map(product => (
