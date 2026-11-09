@@ -270,3 +270,19 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
  .receipt-table th,.receipt-table td{border-color:#bbb}
  .receipt-totals>div span,.receipt-meta small,.receipt-header p,.receipt-note,.receipt-footer span{color:#444}
 }
+
+
+/* Customer payment collection */
+.payment-collection-form{display:grid;gap:7px;min-width:190px;max-width:260px;padding:12px;border:1px solid var(--line);border-radius:7px;background:#fbfcfb}
+.payment-collection-form label{font-size:9px;font-weight:800;margin-top:4px}
+.payment-collection-form input,.payment-collection-form select{width:100%;min-width:0;border:1px solid var(--line);border-radius:5px;padding:8px;font:inherit;font-size:10px;background:#fff;color:var(--ink)}
+.payment-outstanding{display:flex;flex-direction:column;gap:4px;padding-bottom:7px;border-bottom:1px solid var(--line);font-size:9px;color:var(--muted)}
+.payment-outstanding strong{font-size:14px;color:var(--ink)}
+.payment-history{display:grid;gap:4px;margin:7px 0;padding:9px 10px;border-left:2px solid var(--green);background:#f7faf7}
+.payment-history strong{font-size:9px}.payment-history small{font-size:9px;color:var(--muted);line-height:1.5}
+.receipt-payment-history{display:grid;gap:8px;margin:22px 0 0;padding-top:15px;border-top:1px solid #dfe6e1}
+.receipt-payment-history>strong{font-size:11px}
+.receipt-payment-history>div{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:10px}
+.receipt-payment-history>div span,.receipt-payment-history small{color:#65736b}
+.receipt-payment-history small{grid-column:1/-1}
+@media print{.receipt-payment-history{break-inside:avoid}}
