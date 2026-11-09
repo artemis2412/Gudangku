@@ -12,6 +12,7 @@ Next.js App Router + TypeScript web client.
 - Stock document drafts for IN, OUT, and TRANSFER
 - Manager-only posting through the atomic database stock-posting function
 - Per-warehouse stock balances and filterable stock movement ledger
+- Stock opname drafts with manager-only atomic stock adjustments and audit history
 
 ## Setup
 1. Copy `.env.example` to `.env.local`.
