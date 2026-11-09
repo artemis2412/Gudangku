@@ -8,7 +8,8 @@ import { SupplierPaymentForm } from "./supplier-payment-form";
 
 type Warehouse = { id: string; code: string; name: string };
 type Product = { id: string; name: string; sku: string | null; purchase_price: number | string; selling_price: number | string; pieces_per_carton: number | null; piece_selling_price: number | string | null; carton_selling_price: number | string | null };
-type Customer = { id: string; name: string; phone: string | null };\ntype Supplier = { id: string; name: string; code: string | null };
+type Customer = { id: string; name: string; phone: string | null };
+type Supplier = { id: string; name: string; code: string | null };
 type PaymentRow={id:string;amount:number|string;payment_method:string;reference_number:string|null;received_at:string};
 type SupplierPaymentRow={id:string;amount:number|string;payment_method:string;reference_number:string|null;paid_at:string};
 type Document = { id: string; document_number: string; document_type: string; status: string; occurred_at: string; notes: string | null; subtotal_amount:number|string;discount_amount:number|string;grand_total:number|string;payment_method:string;amount_received:number|string;change_amount:number|string;payment_status:string; supplier_id:string|null; suppliers:{name:string}|null; supplier_payments:SupplierPaymentRow[]; customer_payments:PaymentRow[]; stock_document_items: { id: string; quantity: number | string; sales_unit: string; sales_quantity: number | string; unit_price: number | string; line_total: number | string; products: { name: string } | null }[] };
@@ -27,7 +28,8 @@ export default async function StockDocumentsPage({ params }: { params: Promise<{
   const [warehousesResult, productsResult, customersResult, suppliersResult, documentsResult] = await Promise.all([
     supabase.from("warehouses").select("id, code, name").eq("organization_id", organizationId).eq("is_active", true).order("name"),
     supabase.from("products").select("id, name, sku, purchase_price, selling_price, pieces_per_carton, piece_selling_price, carton_selling_price").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
-    supabase.from("customers").select("id, name, phone").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),\n    supabase.from("suppliers").select("id, name, code").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
+    supabase.from("customers").select("id, name, phone").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
+    supabase.from("suppliers").select("id, name, code").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
     supabase.from("stock_documents").select("id, supplier_id, document_number, document_type, status, occurred_at, notes, subtotal_amount, discount_amount, grand_total, payment_method, amount_received, change_amount, payment_status, suppliers(name), supplier_payments(id,amount,payment_method,reference_number,paid_at), customer_payments(id,amount,payment_method,reference_number,received_at), stock_document_items(id, quantity, sales_unit, sales_quantity, unit_price, line_total, products(name))")
       .eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
   ]);
