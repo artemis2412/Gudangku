@@ -139,7 +139,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
 
       <section className="quick-links">
         <div><p className="eyebrow">LANGKAH SELANJUTNYA</p><h2>Kelola persediaan</h2></div>
-        <p>Dashboard dasar sudah membaca data organisasi. Modul master produk, gudang, dan transaksi akan dibangun berikutnya.</p>
+        <div className="workspace-module-links"><Link href={`/dashboard/${organization.id}/products`}>Kelola produk <span>↗</span></Link><Link href={`/dashboard/${organization.id}/warehouses`}>Kelola gudang <span>↗</span></Link></div><p>Master data produk dan gudang sudah tersedia. Modul transaksi stok menyusul.</p>
       </section>
     </main>
   );
