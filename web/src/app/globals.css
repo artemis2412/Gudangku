@@ -304,3 +304,14 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .sales-report-table{min-width:1120px}
 @media(max-width:900px){.report-filters{grid-template-columns:1fr 1fr}.report-filters>div:nth-child(3){grid-column:1/-1}.report-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.report-filters{grid-template-columns:1fr}.report-filters>div:nth-child(3){grid-column:auto}.report-metric-grid{gap:8px}.report-metric-grid .metric-card{padding:13px}.report-metric-grid .metric-card strong{font-size:17px}.report-summary-line{flex-direction:column;gap:7px}}
+
+
+/* Inventory and stock movement report */
+.inventory-report-filters{display:grid;grid-template-columns:1fr 1fr 1.4fr 1.2fr auto auto;align-items:end;gap:10px}
+.inventory-report-filters>div{display:flex;flex-direction:column;gap:7px;min-width:0}
+.inventory-report-filters label{font-size:10px;font-weight:800}
+.inventory-report-filters input,.inventory-report-filters select{width:100%;min-width:0;border:1px solid var(--line);border-radius:5px;padding:10px;background:#fff;color:var(--ink);font:inherit;font-size:10px}
+.inventory-report-filters .report-filter-submit{border:0;cursor:pointer;font:inherit;font-size:10px;white-space:nowrap}
+.inventory-report-table{min-width:1050px}
+@media(max-width:1050px){.inventory-report-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.inventory-report-filters .report-reset{justify-self:start}}
+@media(max-width:520px){.inventory-report-filters{grid-template-columns:1fr}}
