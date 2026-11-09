@@ -337,3 +337,17 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .master-list li{display:flex;flex-direction:column;gap:5px;padding:13px 0;border-top:1px solid #edf1ee}
 .master-list li strong{font-size:11px}
 .master-list li span{font-size:10px;color:var(--muted)}
+
+
+/* Editable category and unit lists */
+.master-list-wrap{min-width:0}
+.master-list li{gap:10px}
+.master-item-copy{display:flex;flex:1;flex-direction:column;gap:5px;min-width:0}
+.master-item-copy strong{font-size:11px;overflow-wrap:anywhere}
+.master-item-copy span{font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.master-row-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.master-row-actions .text-button{font-size:10px;font-weight:800;padding:5px 0}
+.danger-text{color:#a43e36}
+.master-inline-edit{width:100%;display:grid;gap:8px}
+.master-inline-edit label{display:grid;gap:5px;font-size:9px;font-weight:800}
+.master-inline-edit input{width:100%;min-width:0;border:1px solid var(--line);border-radius:5px;padding:9px;font:inherit;font-size:10px}
