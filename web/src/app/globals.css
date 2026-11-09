@@ -46,3 +46,41 @@ h1 span{color:var(--green)}
 footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify-content:space-between;color:#8a968f;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.08em}
 @media(max-width:800px){.shell{padding:0 22px}.hero{grid-template-columns:1fr;gap:42px;padding:65px 0 75px}.hero-panel{max-width:540px}.module-grid{grid-template-columns:repeat(2,1fr)}.section-heading{align-items:start;gap:14px;flex-direction:column}}
 @media(max-width:520px){.topbar{height:70px}.hero{padding-top:53px}.module-grid{grid-template-columns:1fr}.module-card{min-height:135px}.panel-foot{font-size:8px}.flow-step{min-width:62px}.flow-line{margin:0 3px}}
+
+
+/* Authentication and organization workspace */
+.auth-shell{min-height:100vh;display:grid;place-items:center;padding:32px 20px;background:var(--paper)}
+.auth-card{width:min(100%,460px);background:#fff;border:1px solid var(--line);border-radius:10px;padding:38px;box-shadow:0 20px 60px rgba(30,60,42,.06)}
+.auth-brand{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:800;letter-spacing:.13em;margin-bottom:44px}
+.auth-card h1,.dashboard-heading h1{font-size:clamp(32px,5vw,43px);letter-spacing:-.06em;line-height:1.1;margin:0}
+.auth-description{font-size:13px;line-height:1.8;color:var(--muted);margin:13px 0 25px}
+.auth-form,.organization-form{display:flex;flex-direction:column;gap:10px}
+.auth-form label,.organization-form label{font-size:11px;font-weight:800;margin-top:7px}
+.auth-form input,.organization-form input{width:100%;border:1px solid var(--line);border-radius:5px;padding:13px 12px;font:inherit;font-size:13px;outline:none;background:#fff;color:var(--ink)}
+.auth-form input:focus,.organization-form input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(35,107,75,.09)}
+.auth-submit{justify-content:center;border:0;margin-top:12px;cursor:pointer;font:inherit;font-size:12px}
+.auth-submit:disabled,.organization-form button:disabled{opacity:.65;cursor:wait}
+.auth-switch{font-size:11px;color:var(--muted);margin:22px 0 0;text-align:center}
+.auth-switch a{color:var(--green);font-weight:800}
+.field-hint{font-size:10px;color:var(--muted);margin:0}
+.form-error{font-size:11px;color:#a43e36;background:#fff0ee;border-radius:5px;padding:10px}
+.form-success{font-size:11px;color:#236b4b;background:var(--mint);border-radius:5px;padding:10px}
+.dashboard-shell{max-width:1050px;margin:0 auto;padding:0 32px;min-height:100vh}
+.dashboard-topbar{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.text-button{border:0;background:none;color:var(--muted);font:inherit;font-size:11px;cursor:pointer}
+.dashboard-heading{padding:60px 0 30px;max-width:620px}
+.dashboard-heading .auth-description{margin-bottom:0}
+.empty-organization{background:#fff;border:1px solid var(--line);border-radius:9px;padding:28px;max-width:560px}
+.empty-organization h2{font-size:19px;letter-spacing:-.04em;margin:0 0 8px}
+.empty-organization>p,.organization-card p{font-size:12px;color:var(--muted);line-height:1.7}
+.organization-form{max-width:400px;margin-top:22px}
+.organization-form button{align-self:flex-start;border:0;cursor:pointer;font:inherit;font-size:12px;margin-top:8px}
+.organization-list{display:grid;gap:12px}
+.organization-card{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px}
+.organization-card h2{font-size:16px;margin:0}
+.organization-card p{margin:7px 0 0}
+.organization-card .primary-button{font-size:10px;white-space:nowrap}
+.workspace-panel{background:#fff;border:1px solid var(--line);border-radius:9px;padding:26px;max-width:650px}
+.workspace-panel h2{font-size:21px;letter-spacing:-.04em;margin:0 0 9px}
+.workspace-panel p{font-size:12px;color:var(--muted);line-height:1.8}
+@media(max-width:520px){.auth-card{padding:27px 22px}.auth-brand{margin-bottom:35px}.dashboard-shell{padding:0 20px}.organization-card{align-items:flex-start;flex-direction:column}.dashboard-heading{padding-top:45px}}
