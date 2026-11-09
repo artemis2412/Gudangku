@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 type Unit = { id: string; name: string; abbreviation: string };
 export function UnitList({ organizationId, items, canManage }: { organizationId: string; items: Unit[]; canManage: boolean }) {
@@ -10,7 +10,7 @@ export function UnitList({ organizationId, items, canManage }: { organizationId:
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   function start(item: Unit) { setEditing(item.id); setName(item.name); setAbbreviation(item.abbreviation); setError(""); }
-  async function save(event: React.FormEvent<HTMLFormElement>) {
+  async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!editing) return; setBusy(true); setError("");
     try {
       const response = await fetch(`/api/organizations/${organizationId}/units`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, name, abbreviation }) });
