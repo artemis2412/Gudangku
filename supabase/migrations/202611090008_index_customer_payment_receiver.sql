@@ -1,0 +1,1 @@
+create index customer_payments_received_by_idx on public.customer_payments (received_by);
