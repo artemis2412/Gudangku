@@ -62,3 +62,8 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - Posting an incoming document updates stock through the existing atomic stock-posting workflow. Supplier balances are tracked on the same posted purchase document.
 - Subsequent supplier payments are recorded in `supplier_payments` and atomically update the purchase's amount received and payment status. Payments are limited to the outstanding amount.
 - Supplier payment history is visible in transaction history. Supplier payment creation is available only for posted purchases linked to a supplier.
+
+### Purchase and supplier payable reporting
+- `/dashboard/[organizationId]/reports/purchases` reports posted supplier-linked incoming stock documents, filtered by date and supplier.
+- Summary metrics include purchase count, purchase total after discounts, allocated payments, and outstanding supplier payables.
+- Supplier payments are stored separately from stock movement and cannot exceed the outstanding purchase balance.
