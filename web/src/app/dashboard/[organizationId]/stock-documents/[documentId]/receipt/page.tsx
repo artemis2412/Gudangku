@@ -15,7 +15,7 @@ export default async function SalesReceiptPage({params}:{params:Promise<{organiz
  if(!userId)redirect("/login");
  const {data:membership}=await supabase.from("organization_members").select("role,organizations(name)").eq("organization_id",organizationId).eq("user_id",userId).maybeSingle();
  if(!membership?.organizations)notFound();
- const {data:doc,error}=await supabase.from("stock_documents").select("id,document_number,document_type,status,occurred_at,notes,reference_number,source_warehouse_id,subtotal_amount,discount_amount,grand_total,payment_method,amount_received,change_amount,payment_status,stock_document_items(id,quantity,sales_unit,sales_quantity,unit_price,line_total,products(name,sku))").eq("id",documentId).eq("organization_id",organizationId).maybeSingle();
+ const {data:doc,error}=await supabase.from("stock_documents").select("id,document_number,document_type,status,occurred_at,notes,reference_number,source_warehouse_id,customer_id,subtotal_amount,discount_amount,grand_total,payment_method,amount_received,change_amount,payment_status,stock_document_items(id,quantity,sales_unit,sales_quantity,unit_price,line_total,products(name,sku))").eq("id",documentId).eq("organization_id",organizationId).maybeSingle();
  if(error||!doc||doc.document_type!=="OUT")notFound();
  const {data:customer}=doc.customer_id?await supabase.from("customers").select("name,phone,address").eq("id",doc.customer_id).eq("organization_id",organizationId).maybeSingle():{data:null};
  const {data:warehouse}=await supabase.from("warehouses").select("name,code,address").eq("id",doc.source_warehouse_id).eq("organization_id",organizationId).maybeSingle();
