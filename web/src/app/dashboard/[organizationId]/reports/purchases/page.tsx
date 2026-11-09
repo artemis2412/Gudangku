@@ -6,7 +6,11 @@ type Row={id:string;document_number:string;occurred_at:string;supplier_id:string
 const n=(v:number|string|null|undefined)=>Number(v??0);
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
 const date=(v:string)=>new Intl.DateTimeFormat("id-ID",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v));
-const valid=(v?:string)=>!!v&&/^\\d{4}-\\d{2}-\\d{2}$/.test(v)&&!Number.isNaN(Date.parse(v));
+const valid = (value?: string) => {
+ if (!value || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+ const parsed = new Date(`${value}T00:00:00Z`);
+ return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+};
 export default async function PurchaseReport({params,searchParams}:{params:Promise<{organizationId:string}>;searchParams:Promise<Filters>}){
  const {organizationId}=await params;const f=await searchParams;const from=valid(f.from)?f.from!:"";const to=valid(f.to)?f.to!:"";const supplier=f.supplier??"";
  const supabase=await createClient();const {data:claims}=await supabase.auth.getClaims();const userId=claims?.claims?.sub;if(!userId)redirect("/login");
