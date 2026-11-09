@@ -7,7 +7,7 @@ type Line={product_id:string;quantity:string;unit_cost:string;sales_unit:"PCS"|"
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
 export function StockDocumentForm({organizationId,warehouses,products}:{organizationId:string;warehouses:Warehouse[];products:Product[]}) {
  const router=useRouter();const [type,setType]=useState<"IN"|"OUT"|"TRANSFER">("IN");const [source,setSource]=useState("");const [destination,setDestination]=useState("");
- const [notes,setNotes]=useState("");const [reference,setReference]=useState("");
+ const [notes,setNotes]=useState("");const [reference,setReference]=useState("");const [discount,setDiscount]=useState("0");const [paymentMethod,setPaymentMethod]=useState<"CASH"|"BANK_TRANSFER"|"QRIS"|"CREDIT">("CASH");const [amountReceived,setAmountReceived]=useState("0");
  const [lines,setLines]=useState<Line[]>([{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);
  const [error,setError]=useState("");const [busy,setBusy]=useState(false);
  function updateLine(index:number,key:keyof Line,value:string){setLines(current=>current.map((line,i)=>i===index?{...line,[key]:value}:line));}
@@ -15,13 +15,13 @@ export function StockDocumentForm({organizationId,warehouses,products}:{organiza
  function changeSalesUnit(index:number,unit:"PCS"|"CARTON"){const line=lines[index];const p=products.find(x=>x.id===line.product_id);const price=unit==="CARTON"?p?.carton_selling_price:p?.piece_selling_price??p?.selling_price;setLines(current=>current.map((x,i)=>i===index?{...x,sales_unit:unit,unit_price:String(price??0)}:x));}
  function addLine(){if(lines.length<200)setLines(x=>[...x,{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);}
  function removeLine(index:number){setLines(x=>x.length>1?x.filter((_,i)=>i!==index):x);}
- const total=useMemo(()=>type==="OUT"?lines.reduce((sum,line)=>sum+Number(line.sales_quantity||0)*Number(line.unit_price||0),0):0,[type,lines]);
+ const subtotal=useMemo(()=>type==="OUT"?lines.reduce((sum,line)=>sum+Number(line.sales_quantity||0)*Number(line.unit_price||0),0):0,[type,lines]);const discountValue=Math.max(0,Number(discount||0));const grandTotal=Math.max(0,subtotal-discountValue);const receivedValue=Math.max(0,Number(amountReceived||0));const changeValue=paymentMethod==="CASH"?Math.max(0,receivedValue-grandTotal):0;
  async function submit(event:FormEvent<HTMLFormElement>){event.preventDefault();setBusy(true);setError("");
   try{const response=await fetch(`/api/organizations/${organizationId}/stock-documents`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-   document_type:type,source_warehouse_id:type==="IN"?null:source,destination_warehouse_id:type==="OUT"?null:destination,notes,reference_number:reference,
+   document_type:type,source_warehouse_id:type==="IN"?null:source,destination_warehouse_id:type==="OUT"?null:destination,notes,reference_number:reference,discount_amount:type==="OUT"?Number(discount):0,payment_method:type==="OUT"?paymentMethod:"CASH",amount_received:type==="OUT"?Number(amountReceived):0,
    items:lines.map(line=>type==="OUT"?{product_id:line.product_id,sales_unit:line.sales_unit,sales_quantity:Number(line.sales_quantity),unit_price:Number(line.unit_price),unit_cost:Number(line.unit_cost)}:{product_id:line.product_id,quantity:Number(line.quantity),unit_cost:Number(line.unit_cost)})
   })});const result=await response.json();if(!response.ok){setError(result.error||"Transaksi gagal dibuat.");return;}
-  setLines([{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);setNotes("");setReference("");router.refresh();
+  setLines([{product_id:"",quantity:"1",unit_cost:"0",sales_unit:"PCS",sales_quantity:"1",unit_price:"0"}]);setNotes("");setReference("");setDiscount("0");setAmountReceived("0");router.refresh();
   }catch{setError("Koneksi bermasalah. Coba lagi.");}finally{setBusy(false);}
  }
  return <form className="master-form transaction-form" onSubmit={submit}>
@@ -43,7 +43,15 @@ export function StockDocumentForm({organizationId,warehouses,products}:{organiza
     {lines.length>1&&<button type="button" className="remove-line-button" onClick={()=>removeLine(index)}>Hapus item</button>}
    </div>;
   })}
-  {type==="OUT"&&<div className="sales-total-panel"><span>Total penjualan</span><strong>{money(total)}</strong></div>}
+  {type==="OUT"&&<div className="sales-payment-panel">
+   <div className="sales-payment-row"><span>Subtotal</span><strong>{money(subtotal)}</strong></div>
+   <label htmlFor="sales-discount">Diskon (Rp)</label><input id="sales-discount" type="number" min="0" max={subtotal} step="1" value={discount} onChange={e=>setDiscount(e.target.value)} />
+   <div className="sales-payment-row sales-grand-total"><span>Total akhir</span><strong>{money(grandTotal)}</strong></div>
+   <label htmlFor="sales-payment-method">Metode pembayaran</label><select id="sales-payment-method" value={paymentMethod} onChange={e=>setPaymentMethod(e.target.value as typeof paymentMethod)}><option value="CASH">Tunai</option><option value="BANK_TRANSFER">Transfer bank</option><option value="QRIS">QRIS</option><option value="CREDIT">Belum lunas / tempo</option></select>
+   <label htmlFor="sales-received">Uang diterima (Rp)</label><input id="sales-received" type="number" min="0" step="1" value={amountReceived} onChange={e=>setAmountReceived(e.target.value)} />
+   <div className="sales-payment-row"><span>{paymentMethod==="CASH"?"Kembalian":"Sisa tagihan"}</span><strong>{paymentMethod==="CASH"?money(changeValue):money(Math.max(0,grandTotal-receivedValue))}</strong></div>
+   <p className="field-hint">Pembayaran: {receivedValue===0?"Belum dibayar":receivedValue>=grandTotal?"Lunas":"Dibayar sebagian"}. Nilai final akan dihitung ulang dan divalidasi oleh server.</p>
+  </div>}
   <label htmlFor="doc-reference">Nomor referensi / nota (opsional)</label><input id="doc-reference" value={reference} onChange={e=>setReference(e.target.value)} maxLength={100}/>
   <label htmlFor="doc-notes">Catatan (opsional)</label><textarea id="doc-notes" rows={2} value={notes} onChange={e=>setNotes(e.target.value)} maxLength={1000}/>
   <p className="field-hint">Dokumen disimpan sebagai draft. Stok baru berkurang setelah manager memposting transaksi. Harga dan subtotal tersimpan pada dokumen sebagai riwayat.</p>
