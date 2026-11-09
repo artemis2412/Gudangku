@@ -49,3 +49,9 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - The organization dashboard links to `/dashboard/[organizationId]/reports/sales` for posted outbound sales, with date and customer filters.
 - The report summarizes gross subtotal, discounts, net sales, allocated payments, and outstanding receivables; drafts are excluded.
 - Payment collected is capped at each sale's grand total so cash change is not counted as revenue collected. The report currently displays up to 1,000 matching transactions; narrow the date range for larger histories.
+
+### Inventory and stock movement report
+- The organization dashboard links to `/dashboard/[organizationId]/reports/inventory` with date, product, and warehouse filters.
+- The report shows current on-hand quantity, estimated inventory value using each product's current purchase price, and movement totals for the selected period.
+- The movement ledger includes stock documents and stock-count adjustments. Movement cost values are indicative snapshots; inventory value is not a historical valuation or accounting valuation report.
+- The report currently shows up to 1,000 matching movements and 10,000 balance rows; narrow filters for large organizations.
