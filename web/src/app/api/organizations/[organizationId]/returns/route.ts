@@ -17,7 +17,8 @@ export async function POST(request:NextRequest,{params}:{params:Promise<{organiz
  const raw=Array.isArray(input.items)?input.items as InputItem[]:[];
  if(!raw.length||raw.length>200)return NextResponse.json({error:"Pilih minimal satu item retur."},{status:400});
  const sourceItems=original.stock_document_items as unknown as Array<{id:string;product_id:string;quantity:number|string;unit_cost:number|string;unit_price:number|string;products:{name:string}|null}>;
- const sourceMap=new Map(sourceItems.map(x=>[x.id,x]));\n const originalSubtotal=Number(original.subtotal_amount??0);const discountFactor=originalSubtotal>0?Math.max(0,(originalSubtotal-Number(original.discount_amount??0))/originalSubtotal):1;
+ const sourceMap=new Map(sourceItems.map(x=>[x.id,x]));
+ const originalSubtotal=Number(original.subtotal_amount??0);const discountFactor=originalSubtotal>0?Math.max(0,(originalSubtotal-Number(original.discount_amount??0))/originalSubtotal):1;
  const ids=raw.map(x=>typeof x.original_document_item_id==="string"?x.original_document_item_id:"");
  if(ids.some(x=>!x)||new Set(ids).size!==ids.length)return NextResponse.json({error:"Item retur kosong atau duplikat."},{status:400});
  const {data:prior}=await supabase.from("stock_return_items").select("original_document_item_id,quantity,stock_returns!inner(status)").in("original_document_item_id",ids).eq("organization_id",organizationId).eq("stock_returns.status","POSTED");
