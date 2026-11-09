@@ -157,3 +157,25 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .workspace-module-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
 .workspace-module-links a{display:inline-flex;align-items:center;gap:20px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:11px 13px;font-size:10px;font-weight:800;color:var(--green)}
 .workspace-module-links a span{color:#8da197}
+
+
+/* Stock transaction workflow */
+.document-list{display:flex;flex-direction:column}
+.document-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid #edf1ee}
+.document-main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.document-main>small{font-size:9px;color:var(--muted);overflow-wrap:anywhere}
+.document-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.document-title strong{font-family:"DM Mono",monospace;font-size:10px}
+.status-pending{font-family:"DM Mono",monospace;font-size:9px;color:#8a5b20;background:#fff2dc;border-radius:4px;padding:6px 8px}
+.post-document-button{border:1px solid #cfe0d3;background:#e7f1e9;color:#236b4b;border-radius:5px;padding:8px 11px;font:inherit;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap}
+.post-document-button:disabled{opacity:.55;cursor:wait}
+.post-action{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.inline-error{max-width:180px;color:#a43e36;font-size:9px;text-align:right}
+.transaction-form{gap:8px}
+.transaction-lines-heading{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.transaction-lines-heading strong{font-size:11px}
+.add-line-button,.remove-line-button{border:0;background:none;color:var(--green);font:inherit;font-size:10px;font-weight:800;cursor:pointer;padding:5px 0}
+.add-line-button:disabled{opacity:.5}
+.transaction-line{border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.remove-line-button{align-self:flex-end;color:#a43e36}
+@media(max-width:520px){.document-row{align-items:flex-start}.post-action{max-width:105px}.document-title{gap:6px}}
