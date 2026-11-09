@@ -207,3 +207,15 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .count-complete-action{display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:180px}
 .count-complete-action .form-error{font-size:9px}
 @media(max-width:600px){.count-entry{align-items:flex-start}.count-entry input{width:78px}}
+
+
+.form-divider-label{margin-top:8px;padding-top:14px;border-top:1px solid var(--line);font-size:9px;font-weight:800;letter-spacing:.12em;color:var(--muted)}
+.sales-line-summary,.sales-total-panel{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;background:var(--surface-soft,#f6f6f4);border:1px solid var(--line);border-radius:6px;font-size:10px}
+.sales-line-summary span{color:var(--muted)}
+.sales-line-summary strong,.sales-total-panel strong{font-variant-numeric:tabular-nums;color:var(--foreground)}
+.sales-total-panel{margin:12px 0;padding:14px;font-size:12px}
+.sales-total-panel strong{font-size:18px}
+.sales-cost-note{display:flex;flex-direction:column;justify-content:flex-end;gap:5px;font-size:9px;color:var(--muted)}
+.sales-cost-note strong{font-size:12px;color:var(--foreground)}
+.sales-document-lines{display:grid;gap:3px;margin-top:5px;padding-left:8px;border-left:2px solid var(--line)}
+.sales-document-lines small{font-size:9px;color:var(--muted)}
