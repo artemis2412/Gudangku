@@ -29,6 +29,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   if (sku.length > 60 || barcode.length > 80 || description.length > 1000) return NextResponse.json({ error: "SKU, barcode, atau deskripsi terlalu panjang." }, { status: 400 });
   if (![minimumStock, purchasePrice, sellingPrice].every(value => Number.isFinite(value) && value >= 0)) return NextResponse.json({ error: "Stok minimum dan harga harus berupa angka nol atau lebih." }, { status: 400 });
 
+  if (categoryId) {
+    const { data: category } = await supabase.from("product_categories").select("id")
+      .eq("id", categoryId).eq("organization_id", organizationId).maybeSingle();
+    if (!category) return NextResponse.json({ error: "Kategori tidak valid untuk organisasi ini." }, { status: 400 });
+  }
+  if (unitId) {
+    const { data: unit } = await supabase.from("units").select("id")
+      .eq("id", unitId).eq("organization_id", organizationId).maybeSingle();
+    if (!unit) return NextResponse.json({ error: "Satuan tidak valid untuk organisasi ini." }, { status: 400 });
+  }
+
   const { data, error } = await supabase.from("products").insert({
     organization_id: organizationId, name, sku: sku || null, barcode: barcode || null,
     description: description || null, category_id: categoryId, unit_id: unitId,
