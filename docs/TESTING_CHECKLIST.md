@@ -93,7 +93,16 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Pengembalian uang/settlement sebagian dan penuh menghitung sisa dengan benar.
 - [ ] Settlement melebihi nilai retur ditolak.
 
-## 11. Audit dan konsistensi
+
+## 11. Laporan
+- [ ] Filter tanggal awal dan akhir pada laporan penjualan berfungsi.
+- [ ] Filter pelanggan pada laporan penjualan hanya menampilkan transaksi pelanggan terpilih.
+- [ ] Filter tanggal awal dan akhir pada laporan pembelian berfungsi.
+- [ ] Filter supplier pada laporan pembelian hanya menampilkan transaksi supplier terpilih.
+- [ ] Total, diskon, pembayaran diterima, piutang, dan utang cocok dengan dokumen sumber.
+- [ ] Transaksi draft dan transaksi yang dibatalkan tidak masuk laporan.
+
+## 12. Audit dan konsistensi
 - [ ] Setiap posting transaksi menghasilkan stock movement.
 - [ ] Setiap penyesuaian opname menghasilkan movement.
 - [ ] Setiap retur menghasilkan movement dengan sumber retur.
@@ -101,7 +110,7 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Audit log mencatat tindakan penting.
 - [ ] Refresh halaman tidak menghilangkan sesi yang valid.
 
-## 12. Kriteria siap uji coba terbatas
+## 13. Kriteria siap uji coba terbatas
 - [ ] Workflow GitHub Actions lulus lint, typecheck, dan build.
 - [ ] Seluruh skenario kritis di atas lulus pada lingkungan uji.
 - [ ] Uji dua organisasi memastikan isolasi data.
