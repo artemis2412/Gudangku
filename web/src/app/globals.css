@@ -179,3 +179,7 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 .transaction-line{border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .remove-line-button{align-self:flex-end;color:#a43e36}
 @media(max-width:520px){.document-row{align-items:flex-start}.post-action{max-width:105px}.document-title{gap:6px}}
+
+
+.catalog-settings-form{border-top:1px solid var(--line);margin-top:16px;padding-top:15px}
+.catalog-settings-form .auth-submit{margin-top:6px}
