@@ -74,3 +74,6 @@ Transaksi barang keluar menyimpan snapshot harga jual per pcs/dus, subtotal, dis
 - Sales returns add stock back to the original sales warehouse. Purchase returns remove stock from the original purchase receiving warehouse and are rejected when available stock is insufficient.
 - Return posting creates `SALES_RETURN_IN` or `PURCHASE_RETURN_OUT` stock movements and an audit log entry. Draft returns do not change stock.
 - The return document stores the estimated value based on the original line's sales price or purchase cost. Cash refunds and supplier credit/payment settlement are not yet automated; those require a separate settlement workflow.
+
+- Posted return documents can be settled in installments: sales returns record customer refunds by cash, bank transfer, or QRIS; purchase returns record supplier credit notes or cash/bank/QRIS reimbursements. Settlement amounts are capped at the remaining return value and stored in `stock_return_settlements`.
+- Supplier credit notes are tracked as return settlements; they are not yet automatically applied against a different outstanding purchase invoice.
