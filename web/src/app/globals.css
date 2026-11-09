@@ -330,3 +330,10 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify
 /* Stock returns */
 .return-form .transaction-line,.transaction-form .transaction-line{margin-bottom:10px}
 .return-form .transaction-line small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+
+
+/* Category and unit list layout */
+.master-list{list-style:none;margin:0;padding:0}
+.master-list li{display:flex;flex-direction:column;gap:5px;padding:13px 0;border-top:1px solid #edf1ee}
+.master-list li strong{font-size:11px}
+.master-list li span{font-size:10px;color:var(--muted)}
