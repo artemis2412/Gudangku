@@ -18,6 +18,7 @@ type MovementRow = {
   products: { name: string; sku: string | null } | null;
   warehouses: { name: string } | null;
   stock_documents: { document_number: string } | null;
+  stock_returns: { return_number: string } | null;
 };
 
 const number = (value: number | string | null | undefined) => Number(value ?? 0);
@@ -51,7 +52,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
     supabase.from("stock_balances").select("product_id, quantity")
       .eq("organization_id", organizationId).limit(5000),
     supabase.from("stock_movements")
-      .select("id, movement_type, quantity_delta, occurred_at, products(name, sku), warehouses(name), stock_documents(document_number)")
+      .select("id, movement_type, quantity_delta, occurred_at, products(name, sku), warehouses(name), stock_documents(document_number), stock_returns(return_number)")
       .eq("organization_id", organizationId)
       .order("occurred_at", { ascending: false }).limit(8),
   ]);
@@ -128,7 +129,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
                 const incoming = number(movement.quantity_delta) > 0;
                 return <div className="movement-row" key={movement.id}>
                   <span className={incoming ? "movement-icon incoming" : "movement-icon outgoing"}>{incoming ? "↓" : "↑"}</span>
-                  <div className="movement-description"><strong>{movement.products?.name ?? "Produk"}</strong><small>{movement.stock_documents?.document_number ?? movement.movement_type} · {movement.warehouses?.name ?? "Gudang"}</small><small>{formatDate(movement.occurred_at)}</small></div>
+                  <div className="movement-description"><strong>{movement.products?.name ?? "Produk"}</strong><small>{movement.stock_documents?.document_number ?? movement.stock_returns?.return_number ?? movement.movement_type} · {movement.warehouses?.name ?? "Gudang"}</small><small>{formatDate(movement.occurred_at)}</small></div>
                   <strong className={incoming ? "quantity-positive" : "quantity-negative"}>{incoming ? "+" : ""}{formatNumber(number(movement.quantity_delta))}</strong>
                 </div>;
               })}
@@ -139,7 +140,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
 
       <section className="quick-links">
         <div><p className="eyebrow">LANGKAH SELANJUTNYA</p><h2>Kelola persediaan</h2></div>
-        <div className="workspace-module-links"><Link href={`/dashboard/${organization.id}/products`}>Kelola produk <span>↗</span></Link><Link href={`/dashboard/${organization.id}/customers`}>Kelola pelanggan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/suppliers`}>Kelola supplier <span>↗</span></Link><Link href={`/dashboard/${organization.id}/catalog-settings`}>Kategori & satuan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/warehouses`}>Kelola gudang <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-documents`}>Transaksi stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-balances`}>Saldo stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-card`}>Kartu stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-counts`}>Stock opname <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/sales`}>Laporan penjualan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/inventory`}>Laporan stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/purchases`}>Laporan pembelian <span>↗</span></Link></div><p>Kelola master data dan catat pergerakan stok melalui transaksi masuk, keluar, atau transfer.</p>
+        <div className="workspace-module-links"><Link href={`/dashboard/${organization.id}/products`}>Kelola produk <span>↗</span></Link><Link href={`/dashboard/${organization.id}/customers`}>Kelola pelanggan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/suppliers`}>Kelola supplier <span>↗</span></Link><Link href={`/dashboard/${organization.id}/catalog-settings`}>Kategori & satuan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/warehouses`}>Kelola gudang <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-documents`}>Transaksi stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/returns`}>Retur barang <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-balances`}>Saldo stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-card`}>Kartu stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-counts`}>Stock opname <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/sales`}>Laporan penjualan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/inventory`}>Laporan stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/reports/purchases`}>Laporan pembelian <span>↗</span></Link></div><p>Kelola master data dan catat pergerakan stok melalui transaksi masuk, keluar, atau transfer.</p>
       </section>
     </main>
   );
