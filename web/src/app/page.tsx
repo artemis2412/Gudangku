@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const modules = [
   { code: "01", title: "Produk", description: "Data barang, kategori, dan satuan." },
   { code: "02", title: "Stok masuk", description: "Catat penerimaan barang dari pemasok." },
@@ -11,11 +13,11 @@ export default function HomePage() {
   return (
     <main className="shell">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="GUDANGKU beranda">
+        <Link className="brand" href="/" aria-label="GUDANGKU beranda">
           <span className="brand-mark">G</span>
           <span>GUDANGKU</span>
-        </a>
-        <div className="topbar-actions"><span className="environment">INTERNAL PREVIEW</span><a className="text-button" href="/login">Masuk</a></div>
+        </Link>
+        <div className="topbar-actions"><span className="environment">INTERNAL PREVIEW</span><Link className="text-button" href="/login">Masuk</Link></div>
       </header>
 
       <section className="hero">
