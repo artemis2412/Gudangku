@@ -139,7 +139,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
 
       <section className="quick-links">
         <div><p className="eyebrow">LANGKAH SELANJUTNYA</p><h2>Kelola persediaan</h2></div>
-        <div className="workspace-module-links"><Link href={`/dashboard/${organization.id}/products`}>Kelola produk <span>↗</span></Link><Link href={`/dashboard/${organization.id}/warehouses`}>Kelola gudang <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-documents`}>Transaksi stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-balances`}>Saldo stok <span>↗</span></Link></div><p>Kelola master data dan catat pergerakan stok melalui transaksi masuk, keluar, atau transfer.</p>
+        <div className="workspace-module-links"><Link href={`/dashboard/${organization.id}/products`}>Kelola produk <span>↗</span></Link><Link href={`/dashboard/${organization.id}/catalog-settings`}>Kategori & satuan <span>↗</span></Link><Link href={`/dashboard/${organization.id}/warehouses`}>Kelola gudang <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-documents`}>Transaksi stok <span>↗</span></Link><Link href={`/dashboard/${organization.id}/stock-balances`}>Saldo stok <span>↗</span></Link></div><p>Kelola master data dan catat pergerakan stok melalui transaksi masuk, keluar, atau transfer.</p>
       </section>
     </main>
   );
