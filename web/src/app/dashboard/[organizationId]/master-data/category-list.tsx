@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 type Category = { id: string; name: string; description: string | null };
 export function CategoryList({ organizationId, items, canManage }: { organizationId: string; items: Category[]; canManage: boolean }) {
@@ -10,7 +10,7 @@ export function CategoryList({ organizationId, items, canManage }: { organizatio
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   function start(item: Category) { setEditing(item.id); setName(item.name); setDescription(item.description ?? ""); setError(""); }
-  async function save(event: React.FormEvent<HTMLFormElement>) {
+  async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!editing) return; setBusy(true); setError("");
     try {
       const response = await fetch(`/api/organizations/${organizationId}/categories`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, name, description }) });
