@@ -102,7 +102,15 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Total, diskon, pembayaran diterima, piutang, dan utang cocok dengan dokumen sumber.
 - [ ] Transaksi draft dan transaksi yang dibatalkan tidak masuk laporan.
 
-## 12. Audit dan konsistensi
+## 12. Hak akses RPC transaksi
+- [ ] Pengguna anonim tidak dapat memanggil RPC posting transaksi stok.
+- [ ] Pengguna anonim tidak dapat menyelesaikan stock opname.
+- [ ] Pengguna anonim tidak dapat mencatat pembayaran pelanggan/supplier atau penyelesaian retur.
+- [ ] Pengguna login tanpa keanggotaan organisasi tidak dapat menjalankan operasi transaksi organisasi tersebut.
+- [ ] Staff dapat membuat draft dan mencatat pembayaran sesuai haknya, tetapi tidak dapat memposting dokumen, menyelesaikan opname, atau memposting retur.
+- [ ] Owner/admin/manager dapat memposting transaksi, menyelesaikan opname, dan memposting retur.
+
+## 13. Audit dan konsistensi
 - [ ] Setiap posting transaksi menghasilkan stock movement.
 - [ ] Setiap penyesuaian opname menghasilkan movement.
 - [ ] Setiap retur menghasilkan movement dengan sumber retur.
@@ -110,7 +118,7 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Audit log mencatat tindakan penting.
 - [ ] Refresh halaman tidak menghilangkan sesi yang valid.
 
-## 13. Kriteria siap uji coba terbatas
+## 14. Kriteria siap uji coba terbatas
 - [ ] Workflow GitHub Actions lulus lint, typecheck, dan build.
 - [ ] Seluruh skenario kritis di atas lulus pada lingkungan uji.
 - [ ] Uji dua organisasi memastikan isolasi data.
