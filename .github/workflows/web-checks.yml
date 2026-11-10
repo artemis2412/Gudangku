@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "web/**"
+      - "supabase/migrations/**"
+      - "docs/TESTING_CHECKLIST.md"
       - ".github/workflows/web-checks.yml"
   pull_request:
     paths:
