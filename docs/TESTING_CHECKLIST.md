@@ -127,3 +127,16 @@ Dokumen ini dipakai untuk pengujian bertahap sebelum GUDANGKU dipakai untuk tran
 - [ ] Tidak ada kredensial rahasia di repository.
 
 > Status saat ini: checklist disiapkan sebagai rencana QA. Jangan tandai skenario sebagai lulus sebelum benar-benar dijalankan pada lingkungan uji.
+
+
+## 15. Web app di HP (PWA dasar)
+- [ ] Buka aplikasi melalui HTTPS pada browser Android.
+- [ ] Manifest dapat diakses dan nama aplikasi tampil sebagai GUDANGKU.
+- [ ] Ikon aplikasi tampil benar pada menu instalasi.
+- [ ] Instal aplikasi ke layar utama Android.
+- [ ] Aplikasi terbuka dalam mode standalone tanpa bilah alamat browser.
+- [ ] Tampilan login, dashboard, tabel, dan formulir nyaman digunakan pada layar HP.
+- [ ] Uji orientasi portrait dan landscape.
+- [ ] Pastikan navigasi dan tombol tidak tertutup area sistem Android.
+
+> Catatan PWA: manifest, ikon, dan metadata instalasi sudah ditambahkan. Service worker, cache offline, dan sinkronisasi offline belum dianggap selesai sampai implementasi dan pengujiannya dilakukan.
