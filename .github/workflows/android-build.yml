@@ -41,8 +41,8 @@ jobs:
 
       - name: Install Android platform and build tools
         run: |
-          sdkmanager "platforms;android-37"
-          sdkmanager "build-tools;37.0.0"
+          sdkmanager "platforms;android-36"
+          sdkmanager "build-tools;36.0.0"
 
       - name: Build debug APK
         run: gradle -p android --no-daemon assembleDebug
