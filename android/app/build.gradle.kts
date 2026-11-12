@@ -15,7 +15,7 @@ android {
         versionName = "0.1.0"
         // Set GUDANGKU_WEB_URL in ~/.gradle/gradle.properties or CI secrets.
         val webAppUrl = providers.gradleProperty("GUDANGKU_WEB_URL").orElse("").get()
-        buildConfigField("String", "WEB_APP_URL", "\\"${webAppUrl}\\"")
+        buildConfigField("String", "WEB_APP_URL", "\"\u0024{webAppUrl}\"")
     }
 
     buildFeatures {
