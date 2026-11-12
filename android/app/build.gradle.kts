@@ -13,6 +13,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
+        // Set GUDANGKU_WEB_URL in ~/.gradle/gradle.properties or CI secrets.
+        val webAppUrl = providers.gradleProperty("GUDANGKU_WEB_URL").orElse("").get()
+        buildConfigField("String", "WEB_APP_URL", "\"${webAppUrl}\"")
     }
 
     buildFeatures {
@@ -20,12 +23,6 @@ android {
         buildConfig = true
     }
 
-    // Set GUDANGKU_WEB_URL in ~/.gradle/gradle.properties or CI secrets
-    // after the web deployment is available. Never put Supabase secrets here.
-    val webAppUrl = providers.gradleProperty("GUDANGKU_WEB_URL").orElse("").get()
-    defaultConfig {
-        buildConfigField("String", "WEB_APP_URL", "\"${webAppUrl}\"")
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
