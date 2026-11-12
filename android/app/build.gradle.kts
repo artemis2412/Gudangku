@@ -17,6 +17,14 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    // Set GUDANGKU_WEB_URL in ~/.gradle/gradle.properties or CI secrets
+    // after the web deployment is available. Never put Supabase secrets here.
+    val webAppUrl = providers.gradleProperty("GUDANGKU_WEB_URL").orElse("").get()
+    defaultConfig {
+        buildConfigField("String", "WEB_APP_URL", "\"${webAppUrl}\"")
     }
 
     compileOptions {
