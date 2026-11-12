@@ -36,6 +36,8 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools,platforms;android-37,build-tools;37.0.0"
 
       - name: Build debug APK
         run: gradle -p android --no-daemon assembleDebug
