@@ -15,7 +15,8 @@ type SalesRow = {
   amount_received: number | string;
   payment_status: string;
   payment_method: string;
-  customers: { name: string } | null;\n  warehouses:{time_zone:string}|null;
+  customers: { name: string } | null;
+  warehouses:{time_zone:string}|null;
 };
 
 const amount = (value: number | string | null | undefined) => Number(value ?? 0);
