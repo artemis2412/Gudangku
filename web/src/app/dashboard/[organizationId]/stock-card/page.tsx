@@ -17,7 +17,7 @@ export default async function StockCardPage({ params }: { params: Promise<{ orga
     supabase.from("stock_movements").select("id,movement_type,quantity_delta,unit_cost,occurred_at,products(id,name,sku),warehouses(id,name,code,time_zone),stock_documents(id,document_number,document_type,status),stock_counts(id,count_number,status),stock_document_items(sales_unit,sales_quantity,unit_price,line_total)")
       .eq("organization_id", organizationId).order("occurred_at", { ascending: false }).limit(1000),
     supabase.from("products").select("id,name,sku").eq("organization_id", organizationId).order("name").limit(1000),
-    supabase.from("warehouses").select("id,name,code").eq("organization_id", organizationId).order("name"),
+    supabase.from("warehouses").select("id,name,code,time_zone").eq("organization_id", organizationId).order("name"),
   ]);
   return <main className="dashboard-shell">
     <header className="dashboard-topbar"><Link href="/" className="brand"><span className="brand-mark">G</span><span>GUDANGKU</span></Link><Link href={`/dashboard/${organizationId}`} className="text-button">Kembali ke dashboard</Link></header>
