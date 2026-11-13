@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 
 type Product = { id: string; name: string; sku: string | null };
-type Warehouse = { id: string; name: string; code: string };
+type Warehouse = { id: string; name: string; code: string; time_zone:string };
 type Movement = {
   id: string; movement_type: string; quantity_delta: number | string; unit_cost: number | string; occurred_at: string;
   products: Product | null; warehouses: Warehouse | null;
@@ -11,7 +11,7 @@ type Movement = {
   stock_document_items: { sales_unit: string; sales_quantity: number | string; unit_price: number | string; line_total: number | string } | null;
 };
 const fmt = (v: number | string) => new Intl.NumberFormat("id-ID", { maximumFractionDigits: 3 }).format(Number(v ?? 0));
-const dateFmt = (v: string) => new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(new Date(v));
+const dateFmt = (v: string, zone:string) => new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short", timeZone:zone }).format(new Date(v));
 export function StockCardFilters({ movements, products, warehouses }: { movements: Array<Record<string, unknown>>; products: Product[]; warehouses: Warehouse[] }) {
   const [productId, setProductId] = useState(""); const [warehouseId, setWarehouseId] = useState(""); const [type, setType] = useState("");
   const rows = movements as unknown as Movement[];
@@ -27,7 +27,7 @@ export function StockCardFilters({ movements, products, warehouses }: { movement
       <div><label htmlFor="card-type">Jenis mutasi</label><select id="card-type" value={type} onChange={e => setType(e.target.value)}><option value="">Semua jenis</option><option value="IN">Masuk</option><option value="OUT">Keluar</option><option value="TRANSFER_IN">Transfer masuk</option><option value="TRANSFER_OUT">Transfer keluar</option><option value="ADJUSTMENT_IN">Penyesuaian masuk</option><option value="ADJUSTMENT_OUT">Penyesuaian keluar</option></select></div>
     </div>
     <div className="product-table-wrap"><table className="product-table stock-card-table"><thead><tr><th>Tanggal</th><th>Produk</th><th>Gudang</th><th>Dokumen</th><th>Mutasi</th><th>Saldo perubahan</th><th>Harga jual</th><th>Subtotal</th><th>Biaya modal/unit</th></tr></thead><tbody>
-      {filtered.map(row => <tr key={row.id}><td>{dateFmt(row.occurred_at)}</td><td><strong>{row.products?.name ?? "Produk"}</strong></td><td>{row.warehouses?.name ?? "Gudang"}</td><td>{row.stock_documents?.document_number ?? row.stock_counts?.count_number ?? "—"}</td><td>{row.movement_type === "IN" ? "Masuk" : row.movement_type === "OUT" ? "Keluar" : row.movement_type === "TRANSFER_IN" ? "Transfer masuk" : row.movement_type === "TRANSFER_OUT" ? "Transfer keluar" : row.movement_type === "ADJUSTMENT_IN" ? "Penyesuaian masuk" : "Penyesuaian keluar"}</td><td><strong className={Number(row.quantity_delta) >= 0 ? "quantity-positive" : "quantity-negative"}>{Number(row.quantity_delta) > 0 ? "+" : ""}{fmt(row.quantity_delta)}</strong></td><td>{row.movement_type === "OUT" && row.stock_document_items ? `Rp ${fmt(row.stock_document_items.unit_price)} / ${row.stock_document_items.sales_unit==="CARTON"?"dus":"pcs"}` : "—"}</td><td>{row.movement_type === "OUT" && row.stock_document_items ? `Rp ${fmt(row.stock_document_items.line_total)}` : "—"}</td><td>Rp {fmt(row.unit_cost)}</td></tr>)}
+      {filtered.map(row => <tr key={row.id}><td>{dateFmt(row.occurred_at,row.warehouses?.time_zone??"Asia/Jakarta")}</td><td><strong>{row.products?.name ?? "Produk"}</strong></td><td>{row.warehouses?.name ?? "Gudang"}</td><td>{row.stock_documents?.document_number ?? row.stock_counts?.count_number ?? "—"}</td><td>{row.movement_type === "IN" ? "Masuk" : row.movement_type === "OUT" ? "Keluar" : row.movement_type === "TRANSFER_IN" ? "Transfer masuk" : row.movement_type === "TRANSFER_OUT" ? "Transfer keluar" : row.movement_type === "ADJUSTMENT_IN" ? "Penyesuaian masuk" : "Penyesuaian keluar"}</td><td><strong className={Number(row.quantity_delta) >= 0 ? "quantity-positive" : "quantity-negative"}>{Number(row.quantity_delta) > 0 ? "+" : ""}{fmt(row.quantity_delta)}</strong></td><td>{row.movement_type === "OUT" && row.stock_document_items ? `Rp ${fmt(row.stock_document_items.unit_price)} / ${row.stock_document_items.sales_unit==="CARTON"?"dus":"pcs"}` : "—"}</td><td>{row.movement_type === "OUT" && row.stock_document_items ? `Rp ${fmt(row.stock_document_items.line_total)}` : "—"}</td><td>Rp {fmt(row.unit_cost)}</td></tr>)}
     </tbody></table></div>
     {!filtered.length && <p className="empty-note">Tidak ada mutasi yang cocok dengan filter.</p>}
     <p className="field-hint">Menampilkan maksimal 1.000 mutasi terbaru. Mutasi transfer dicatat sebagai keluar dari gudang asal dan masuk ke gudang tujuan.</p>
