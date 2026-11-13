@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { formatWarehouseDate } from "@/lib/timezone";
 
 type ProductRow = {
   id: string;
@@ -16,7 +17,7 @@ type MovementRow = {
   quantity_delta: number | string;
   occurred_at: string;
   products: { name: string; sku: string | null } | null;
-  warehouses: { name: string } | null;
+  warehouses: { name: string; time_zone: string } | null;
   stock_documents: { document_number: string } | null;
   stock_returns: { return_number: string } | null;
 };
@@ -24,8 +25,7 @@ type MovementRow = {
 const number = (value: number | string | null | undefined) => Number(value ?? 0);
 const formatNumber = (value: number) =>
   new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(value);
-const formatDate = (value: string) =>
-  new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+
 
 export default async function OrganizationWorkspace({ params }: { params: Promise<{ organizationId: string }> }) {
   const { organizationId } = await params;
@@ -52,7 +52,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
     supabase.from("stock_balances").select("product_id, quantity")
       .eq("organization_id", organizationId).limit(5000),
     supabase.from("stock_movements")
-      .select("id, movement_type, quantity_delta, occurred_at, products(name, sku), warehouses(name), stock_documents(document_number), stock_returns(return_number)")
+      .select("id, movement_type, quantity_delta, occurred_at, products(name, sku), warehouses(name,time_zone), stock_documents(document_number), stock_returns(return_number)")
       .eq("organization_id", organizationId)
       .order("occurred_at", { ascending: false }).limit(8),
   ]);
@@ -129,7 +129,7 @@ export default async function OrganizationWorkspace({ params }: { params: Promis
                 const incoming = number(movement.quantity_delta) > 0;
                 return <div className="movement-row" key={movement.id}>
                   <span className={incoming ? "movement-icon incoming" : "movement-icon outgoing"}>{incoming ? "↓" : "↑"}</span>
-                  <div className="movement-description"><strong>{movement.products?.name ?? "Produk"}</strong><small>{movement.stock_documents?.document_number ?? movement.stock_returns?.return_number ?? movement.movement_type} · {movement.warehouses?.name ?? "Gudang"}</small><small>{formatDate(movement.occurred_at)}</small></div>
+                  <div className="movement-description"><strong>{movement.products?.name ?? "Produk"}</strong><small>{movement.stock_documents?.document_number ?? movement.stock_returns?.return_number ?? movement.movement_type} · {movement.warehouses?.name ?? "Gudang"}</small><small>{formatWarehouseDate(movement.occurred_at, movement.warehouses?.time_zone ?? "Asia/Jakarta")}</small></div>
                   <strong className={incoming ? "quantity-positive" : "quantity-negative"}>{incoming ? "+" : ""}{formatNumber(number(movement.quantity_delta))}</strong>
                 </div>;
               })}
