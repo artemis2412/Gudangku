@@ -15,17 +15,20 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   let body: unknown;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Format data tidak valid." }, { status: 400 }); }
-  const input = body as { code?: unknown; name?: unknown; address?: unknown };
+  const input = body as { code?: unknown; name?: unknown; address?: unknown; timeZone?: unknown };
   const code = typeof input.code === "string" ? input.code.trim() : "";
   const name = typeof input.name === "string" ? input.name.trim() : "";
   const address = typeof input.address === "string" ? input.address.trim() : "";
+  const timeZone = typeof input.timeZone === "string" ? input.timeZone.trim() : "Asia/Jakarta";
   if (!code || code.length > 30) return NextResponse.json({ error: "Kode gudang wajib diisi (maksimal 30 karakter)." }, { status: 400 });
   if (name.length < 2 || name.length > 100) return NextResponse.json({ error: "Nama gudang harus 2–100 karakter." }, { status: 400 });
   if (address.length > 250) return NextResponse.json({ error: "Alamat maksimal 250 karakter." }, { status: 400 });
+  try { new Intl.DateTimeFormat("id-ID", { timeZone }).format(new Date()); }
+  catch { return NextResponse.json({ error: "Zona waktu perangkat tidak dikenali. Perbarui pengaturan waktu perangkat lalu coba lagi." }, { status: 400 }); }
 
   const { data, error } = await supabase.from("warehouses")
-    .insert({ organization_id: organizationId, code, name, address: address || null })
-    .select("id, code, name, address, is_active").single();
+    .insert({ organization_id: organizationId, code, name, address: address || null, time_zone: timeZone })
+    .select("id, code, name, address, is_active, time_zone").single();
   if (error) return NextResponse.json({ error: error.code === "23505" ? "Kode gudang sudah digunakan." : "Gudang gagal disimpan. Periksa data dan coba lagi." }, { status: 400 });
   return NextResponse.json({ warehouse: data }, { status: 201 });
 }
