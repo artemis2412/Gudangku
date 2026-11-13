@@ -33,6 +33,7 @@ export default async function StockDocumentsPage({ params }: { params: Promise<{
     supabase.from("suppliers").select("id, name, code").eq("organization_id", organizationId).eq("is_active", true).order("name").limit(500),
     supabase.from("stock_documents").select("id, source_warehouse_id, destination_warehouse_id, supplier_id, document_number, document_type, status, occurred_at, notes, subtotal_amount, discount_amount, grand_total, payment_method, amount_received, change_amount, payment_status, suppliers!stock_documents_supplier_org_fk(name), supplier_payments(id,amount,payment_method,reference_number,paid_at), customer_payments(id,amount,payment_method,reference_number,received_at), stock_document_items(id, quantity, sales_unit, sales_quantity, unit_price, line_total, products(name))")
       .eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
+    supabase.from("warehouses").select("id,time_zone").eq("organization_id", organizationId),
   ]);
   const warehouseTimeZones = new Map((timezoneResult.data ?? []).map(w => [w.id, w.time_zone]));\n  const canPost = ["owner", "admin", "manager"].includes(membership.role);
   return <main className="dashboard-shell">
