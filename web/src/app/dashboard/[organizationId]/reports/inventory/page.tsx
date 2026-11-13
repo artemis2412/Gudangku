@@ -9,7 +9,6 @@ type Balance={product_id:string;warehouse_id:string;quantity:number|string;produ
 const n=(v:number|string|null|undefined)=>Number(v??0);
 const qty=(v:number)=>new Intl.NumberFormat("id-ID",{maximumFractionDigits:3}).format(v);
 const money=(v:number)=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(v);
-const dt=(v:string)=>new Intl.DateTimeFormat("id-ID",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v));
 const validDate=(v?:string)=>!!v&&/^\\d{4}-\\d{2}-\\d{2}$/.test(v)&&!Number.isNaN(Date.parse(v));
 
 export default async function InventoryReportPage({params,searchParams}:{params:Promise<{organizationId:string}>;searchParams:Promise<Filters>}) {
