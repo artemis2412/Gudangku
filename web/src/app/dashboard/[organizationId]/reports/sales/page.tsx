@@ -55,7 +55,7 @@ export default async function SalesReportPage({
   const organization = membership.organizations as unknown as { name: string };
 
   let query = supabase.from("stock_documents")
-    .select("id, document_number, occurred_at, customer_id, subtotal_amount, discount_amount, grand_total, amount_received, payment_status, payment_method, customers(name), warehouses:warehouses!stock_documents_source_warehouse_id_fkey(time_zone)")
+    .select("id, document_number, occurred_at, customer_id, subtotal_amount, discount_amount, grand_total, amount_received, payment_status, payment_method, customers(name), warehouses:warehouses!stock_documents_organization_id_source_warehouse_id_fkey(time_zone)")
     .eq("organization_id", organizationId).eq("document_type", "OUT").eq("status", "POSTED")
     .order("occurred_at", { ascending: false }).limit(1000);
   if (from) query = query.gte("occurred_at", `${from}T00:00:00`);
