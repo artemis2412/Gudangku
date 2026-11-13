@@ -14,7 +14,7 @@ export default async function StockCardPage({ params }: { params: Promise<{ orga
   if (!membership?.organizations) notFound();
   const organization = membership.organizations as unknown as { name: string };
   const [movements, products, warehouses] = await Promise.all([
-    supabase.from("stock_movements").select("id,movement_type,quantity_delta,unit_cost,occurred_at,products(id,name,sku),warehouses(id,name,code),stock_documents(id,document_number,document_type,status),stock_counts(id,count_number,status),stock_document_items(sales_unit,sales_quantity,unit_price,line_total)")
+    supabase.from("stock_movements").select("id,movement_type,quantity_delta,unit_cost,occurred_at,products(id,name,sku),warehouses(id,name,code,time_zone),stock_documents(id,document_number,document_type,status),stock_counts(id,count_number,status),stock_document_items(sales_unit,sales_quantity,unit_price,line_total)")
       .eq("organization_id", organizationId).order("occurred_at", { ascending: false }).limit(1000),
     supabase.from("products").select("id,name,sku").eq("organization_id", organizationId).order("name").limit(1000),
     supabase.from("warehouses").select("id,name,code").eq("organization_id", organizationId).order("name"),
