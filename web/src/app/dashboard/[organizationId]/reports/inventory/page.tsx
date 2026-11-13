@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { formatWarehouseDate } from "@/lib/timezone";
 
 type Filters={from?:string;to?:string;product?:string;warehouse?:string};
-type Movement={id:string;movement_type:string;quantity_delta:number|string;unit_cost:number|string;occurred_at:string;products:{name:string;sku:string|null}|null;warehouses:{name:string;code:string}|null;stock_documents:{document_number:string;document_type:string}|null;stock_counts:{count_number:string}|null};
+type Movement={id:string;movement_type:string;quantity_delta:number|string;unit_cost:number|string;occurred_at:string;products:{name:string;sku:string|null}|null;warehouses:{name:string;code:string;time_zone:string}|null;stock_documents:{document_number:string;document_type:string}|null;stock_counts:{count_number:string}|null};
 type Balance={product_id:string;warehouse_id:string;quantity:number|string;products:{name:string;sku:string|null;purchase_price:number|string}|null;warehouses:{name:string;code:string}|null};
 const n=(v:number|string|null|undefined)=>Number(v??0);
 const qty=(v:number)=>new Intl.NumberFormat("id-ID",{maximumFractionDigits:3}).format(v);
@@ -17,7 +18,7 @@ export default async function InventoryReportPage({params,searchParams}:{params:
  const supabase=await createClient();const {data:claims}=await supabase.auth.getClaims();const userId=claims?.claims?.sub;if(!userId)redirect("/login");
  const {data:membership}=await supabase.from("organization_members").select("organizations(name)").eq("organization_id",organizationId).eq("user_id",userId).maybeSingle();
  if(!membership?.organizations)notFound();const org=membership.organizations as unknown as {name:string};
- let movementQuery=supabase.from("stock_movements").select("id,movement_type,quantity_delta,unit_cost,occurred_at,products(name,sku),warehouses(name,code),stock_documents(document_number,document_type),stock_counts(count_number)").eq("organization_id",organizationId).order("occurred_at",{ascending:false}).limit(1000);
+ let movementQuery=supabase.from("stock_movements").select("id,movement_type,quantity_delta,unit_cost,occurred_at,products(name,sku),warehouses(name,code,time_zone),stock_documents(document_number,document_type),stock_counts(count_number)").eq("organization_id",organizationId).order("occurred_at",{ascending:false}).limit(1000);
  if(from)movementQuery=movementQuery.gte("occurred_at",`${from}T00:00:00`);
  if(to){const end=new Date(`${to}T00:00:00`);end.setDate(end.getDate()+1);movementQuery=movementQuery.lt("occurred_at",end.toISOString());}
  if(product)movementQuery=movementQuery.eq("product_id",product);
@@ -56,7 +57,7 @@ export default async function InventoryReportPage({params,searchParams}:{params:
  </section>
  <section className="data-panel sales-report-table-panel"><div className="panel-section-heading"><div><p className="eyebrow">RINCIAN MUTASI</p><h2>Riwayat pergerakan barang</h2></div><span className="panel-count">{movements.length} mutasi</span></div>
  <div className="report-summary-line"><span>Nilai biaya mutasi (indikatif): <strong>{money(movementValue)}</strong></span><span>Saldo saat ini tidak dibatasi tanggal.</span></div>
- {movements.length?<div className="product-table-wrap"><table className="product-table inventory-report-table"><thead><tr><th>Waktu</th><th>Produk</th><th>Gudang</th><th>Jenis mutasi</th><th>Dokumen sumber</th><th>Perubahan</th><th>Biaya/unit</th><th>Nilai mutasi</th></tr></thead><tbody>{movements.map(m=>{const delta=n(m.quantity_delta);const source=m.stock_documents?.document_number??m.stock_counts?.count_number??"Penyesuaian";return <tr key={m.id}><td>{dt(m.occurred_at)}</td><td><strong>{m.products?.name??"Produk"}</strong><br/>{m.products?.sku??"—"}</td><td>{m.warehouses?.name??"Gudang"}</td><td>{m.movement_type}</td><td>{source}</td><td><strong className={delta>=0?"quantity-positive":"quantity-negative"}>{delta>0?"+":""}{qty(delta)}</strong></td><td>{money(n(m.unit_cost))}</td><td>{money(Math.abs(delta)*n(m.unit_cost))}</td></tr>})}</tbody></table></div>:<p className="empty-note">Tidak ada mutasi stok pada filter ini.</p>}
+ {movements.length?<div className="product-table-wrap"><table className="product-table inventory-report-table"><thead><tr><th>Waktu</th><th>Produk</th><th>Gudang</th><th>Jenis mutasi</th><th>Dokumen sumber</th><th>Perubahan</th><th>Biaya/unit</th><th>Nilai mutasi</th></tr></thead><tbody>{movements.map(m=>{const delta=n(m.quantity_delta);const source=m.stock_documents?.document_number??m.stock_counts?.count_number??"Penyesuaian";return <tr key={m.id}><td>{formatWarehouseDate(m.occurred_at,m.warehouses?.time_zone??"Asia/Jakarta")}</td><td><strong>{m.products?.name??"Produk"}</strong><br/>{m.products?.sku??"—"}</td><td>{m.warehouses?.name??"Gudang"}</td><td>{m.movement_type}</td><td>{source}</td><td><strong className={delta>=0?"quantity-positive":"quantity-negative"}>{delta>0?"+":""}{qty(delta)}</strong></td><td>{money(n(m.unit_cost))}</td><td>{money(Math.abs(delta)*n(m.unit_cost))}</td></tr>})}</tbody></table></div>:<p className="empty-note">Tidak ada mutasi stok pada filter ini.</p>}
  {movements.length===1000&&<p className="field-hint">Menampilkan maksimal 1.000 mutasi terbaru. Persempit rentang tanggal untuk hasil yang lebih lengkap.</p>}
  </section>
  </main>;
