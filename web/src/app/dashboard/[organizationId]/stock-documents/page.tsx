@@ -35,7 +35,8 @@ export default async function StockDocumentsPage({ params }: { params: Promise<{
       .eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
     supabase.from("warehouses").select("id,time_zone").eq("organization_id", organizationId),
   ]);
-  const warehouseTimeZones = new Map((timezoneResult.data ?? []).map(w => [w.id, w.time_zone]));\n  const canPost = ["owner", "admin", "manager"].includes(membership.role);
+  const warehouseTimeZones = new Map((timezoneResult.data ?? []).map(w => [w.id, w.time_zone]));
+  const canPost = ["owner", "admin", "manager"].includes(membership.role);
   return <main className="dashboard-shell">
     <header className="dashboard-topbar"><Link href="/" className="brand"><span className="brand-mark">G</span><span>GUDANGKU</span></Link><Link href={`/dashboard/${organizationId}`} className="text-button">Kembali ke dashboard</Link></header>
     <section className="dashboard-heading"><p className="eyebrow">PERSEDIAAN · TRANSAKSI</p><h1>Transaksi stok</h1><p className="auth-description">Barang masuk, barang keluar, dan transfer antar-gudang untuk {organization.name}.</p></section>
