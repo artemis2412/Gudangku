@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { formatWarehouseDate } from "@/lib/timezone";
 
 type SearchParams = { from?: string; to?: string; customer?: string };
 type SalesRow = {
@@ -14,7 +15,7 @@ type SalesRow = {
   amount_received: number | string;
   payment_status: string;
   payment_method: string;
-  customers: { name: string } | null;
+  customers: { name: string } | null;\n  warehouses:{time_zone:string}|null;
 };
 
 const amount = (value: number | string | null | undefined) => Number(value ?? 0);
@@ -53,7 +54,7 @@ export default async function SalesReportPage({
   const organization = membership.organizations as unknown as { name: string };
 
   let query = supabase.from("stock_documents")
-    .select("id, document_number, occurred_at, customer_id, subtotal_amount, discount_amount, grand_total, amount_received, payment_status, payment_method, customers(name)")
+    .select("id, document_number, occurred_at, customer_id, subtotal_amount, discount_amount, grand_total, amount_received, payment_status, payment_method, customers(name), warehouses:warehouses!stock_documents_source_warehouse_id_fkey(time_zone)")
     .eq("organization_id", organizationId).eq("document_type", "OUT").eq("status", "POSTED")
     .order("occurred_at", { ascending: false }).limit(1000);
   if (from) query = query.gte("occurred_at", `${from}T00:00:00`);
@@ -119,7 +120,7 @@ export default async function SalesReportPage({
           const paid = Math.min(amount(row.grand_total), amount(row.amount_received));
           const due = Math.max(0, amount(row.grand_total) - amount(row.amount_received));
           return <tr key={row.id}>
-            <td>{dateLabel(row.occurred_at)}</td>
+            <td>{formatWarehouseDate(row.occurred_at,row.warehouses?.time_zone??"Asia/Jakarta")}</td>
             <td><strong>{row.document_number}</strong></td>
             <td>{row.customers?.name ?? "Umum"}</td>
             <td>{rupiah(amount(row.subtotal_amount))}</td>
