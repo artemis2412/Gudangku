@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { WarehouseForm } from "./warehouse-form";
+import { WarehouseTimezoneButton } from "./warehouse-timezone-button";
 
 type Warehouse = { id: string; code: string; name: string; address: string | null; is_active: boolean; time_zone: string };
 
@@ -25,7 +26,7 @@ export default async function WarehousesPage({ params }: { params: Promise<{ org
     {error && <p className="form-error">Data gudang gagal dimuat. Periksa koneksi database.</p>}
     <section className="master-layout">
       <article className="data-panel"><div className="panel-section-heading"><div><p className="eyebrow">DAFTAR LOKASI</p><h2>Semua gudang</h2></div><span className="panel-count">{data?.length ?? 0} gudang</span></div>
-      {data?.length ? <div className="master-list">{(data as Warehouse[]).map(item => <div className="master-row" key={item.id}><div><strong>{item.name}</strong><small>{item.code} · {item.address || "Alamat belum diisi"}</small><small>Zona waktu: {item.time_zone}</small></div><span className={item.is_active ? "status-active" : "status-inactive"}>{item.is_active ? "Aktif" : "Nonaktif"}</span></div>)}</div> : <p className="empty-note">Belum ada gudang. Tambahkan lokasi pertama untuk mulai mengelola stok.</p>}</article>
+      {data?.length ? <div className="master-list">{(data as Warehouse[]).map(item => <div className="master-row" key={item.id}><div><strong>{item.name}</strong><small>{item.code} · {item.address || "Alamat belum diisi"}</small><small>Zona waktu: {item.time_zone}</small>{canManage && <WarehouseTimezoneButton organizationId={organizationId} warehouseId={item.id} currentTimeZone={item.time_zone}/>}</div><span className={item.is_active ? "status-active" : "status-inactive"}>{item.is_active ? "Aktif" : "Nonaktif"}</span></div>)}</div> : <p className="empty-note">Belum ada gudang. Tambahkan lokasi pertama untuk mulai mengelola stok.</p>}</article>
       {canManage && <article className="data-panel"><p className="eyebrow">TAMBAH LOKASI</p><h2 className="form-panel-title">Gudang baru</h2><WarehouseForm organizationId={organizationId}/></article>}
     </section>
   </main>;
