@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { formatWarehouseDate } from "@/lib/timezone";
+import { formatWarehouseDate, nextDateKey, warehouseDateKey } from "@/lib/timezone";
 
 type SearchParams = { from?: string; to?: string; customer?: string };
 type SalesRow = {
@@ -58,12 +58,8 @@ export default async function SalesReportPage({
     .select("id, document_number, occurred_at, customer_id, subtotal_amount, discount_amount, grand_total, amount_received, payment_status, payment_method, customers(name), warehouses:warehouses!stock_documents_organization_id_source_warehouse_id_fkey(time_zone)")
     .eq("organization_id", organizationId).eq("document_type", "OUT").eq("status", "POSTED")
     .order("occurred_at", { ascending: false }).limit(1000);
-  if (from) query = query.gte("occurred_at", `${from}T00:00:00`);
-  if (to) {
-    const end = new Date(`${to}T00:00:00`);
-    end.setDate(end.getDate() + 1);
-    query = query.lt("occurred_at", end.toISOString());
-  }
+  if (from) query = query.gte("occurred_at", `${from}T00:00:00+14:00`);
+  if (to) query = query.lt("occurred_at", `${nextDateKey(to)}T00:00:00-12:00`);
   if (customerId) query = query.eq("customer_id", customerId);
 
   const [salesResult, customersResult] = await Promise.all([
@@ -71,7 +67,10 @@ export default async function SalesReportPage({
     supabase.from("customers").select("id, name").eq("organization_id", organizationId)
       .eq("is_active", true).order("name").limit(500),
   ]);
-  const sales = (salesResult.data ?? []) as unknown as SalesRow[];
+  const sales = ((salesResult.data ?? []) as unknown as SalesRow[]).filter(row => {
+    const localDay = warehouseDateKey(row.occurred_at, row.warehouses?.time_zone ?? "Asia/Jakarta");
+    return (!from || localDay >= from) && (!to || localDay <= to);
+  });
   const gross = sales.reduce((sum, row) => sum + amount(row.subtotal_amount), 0);
   const discounts = sales.reduce((sum, row) => sum + amount(row.discount_amount), 0);
   const net = sales.reduce((sum, row) => sum + amount(row.grand_total), 0);
